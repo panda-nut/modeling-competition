@@ -6,7 +6,7 @@ This repository supports a three-member mathematical-modeling team across traini
 
 The required workflow is:
 
-`joint problem analysis → [A] architecture and model V0 → [B] reproduction, validation, and strengthening → [C] paper drafting → [A] final technical review → three-way cross-check → human remote upload`.
+`joint problem analysis → model V0 → reproduction and validation → paper drafting → technical review → cross-check → human remote upload`.
 
 Files under version control are the source of truth. AI chat history, screenshots, and unverified generated text are not evidence.
 
@@ -45,22 +45,24 @@ All AI reads and writes on `practice/apmcm-2026-b` must follow this layout. Use 
 09_submission/       # final delivery files
 ```
 
-## Roles and logical write ownership
+## Operator identity, role assignment, and logical write ownership
 
-These are collaboration rules, not operating-system permissions.
+`[A]`, `[B]`, and `[C]` are **operator codes**, not permanent role labels. At the beginning of every new AI conversation, read this file and confirm the active operator with the user unless it is already recorded below. The confirmed operator for this agent and repository context is **`[A]`**; every commit, handoff, generated-file attribution, and local action performed by this agent uses `[A]`.
 
-| Member | Role | Primary directories | Responsibilities |
+Do not infer a person's modeling, validation, or paper role from an operator code. Roles are assigned explicitly per task or project. The following are responsibility areas, not a mapping to `[A]/[B]/[C]`:
+
+| Role | Primary directories | Responsibilities |
 | --- | --- | --- | --- |
-| [A] | Modeling Lead | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` | architecture, literature, model V0, core code, formal figures, model choice, technical-boundary review |
-| [B] | Validation Lead | `03_data/`, `05_validation/`, `08_results/` | data audit, reproduction, baselines, cross-validation, convergence/sensitivity checks, formal result tables, numerical consistency |
-| [C] | Paper Lead | `07_paper/`, `09_submission/` | restatement, paper structure, sections, LaTeX, abstract, conclusion, references, submission files |
+| Modeling Lead | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` | architecture, literature, model V0, core code, formal figures, model choice, technical-boundary review |
+| Validation Lead | `03_data/`, `05_validation/`, `08_results/` | data audit, reproduction, baselines, cross-validation, convergence/sensitivity checks, formal result tables, numerical consistency |
+| Paper Lead | `07_paper/`, `09_submission/` | restatement, paper structure, sections, LaTeX, abstract, conclusion, references, submission files |
 
 Cross-role rules:
 
 1. Do not modify another member's primary files without stating the reason first.
 2. State the reason before making a cross-directory change.
-3. `07_paper/main.tex` is maintained by [C]; [A] and [B] must not overwrite it.
-4. [A] writes paper material in `01_architecture/paper-notes/`; [B] writes paper material in `05_validation/paper-notes/`; [C] integrates it into `07_paper/sections/`.
+3. `07_paper/main.tex` is maintained by the designated Paper Lead; other operators must not overwrite it.
+4. The Modeling Lead writes paper material in `01_architecture/paper-notes/`; the Validation Lead writes paper material in `05_validation/paper-notes/`; the Paper Lead integrates it into `07_paper/sections/`.
 5. `08_results/final-results.md` is the sole source of formal numerical values. Key values in abstracts, text, tables, and captions must match it.
 6. Do not have more than one person modify the same file simultaneously.
 
@@ -70,7 +72,7 @@ Before every task, an AI/Codex must:
 
 1. Read this `AGENTS.md`.
 2. Confirm the current branch and run `git status`.
-3. Identify its operator code ([A], [B], or [C]), intended directories/files, and possible overlap with others' work.
+3. Confirm its operator code; use the recorded current code `[A]` unless the user explicitly changes it. Identify intended directories/files and possible overlap with others' work.
 4. Check that it will not overwrite another member's uncommitted work.
 
 Default local flow:
@@ -115,11 +117,11 @@ Use English, imperative verb phrases, and one clear task per commit. Allowed typ
 [CHORE] repository maintenance without model changes
 ```
 
-Optional member prefix examples: `[A][MODEL] implement Q1 physical model`, `[B][REVIEW] validate Q2 cross-validation pipeline`, `[C][PAPER] draft Q2 methodology section`. Do not use vague messages such as `update files`, `changes`, or `final version`.
+Prefix every commit with the actual operator code. Current-agent examples: `[A][MODEL] implement Q1 physical model`, `[A][REVIEW] validate Q2 cross-validation pipeline`, `[A][PAPER] draft Q2 methodology section`. Do not use a different code unless the user explicitly reassigns the operator.
 
 ## Progress management
 
-Before editing, read `01_architecture/full-problem-architecture.md`, `01_architecture/model-decision-log.md`, and `08_results/final-results.md` in addition to this file. Record each material route decision in the decision log and never mark a task `validated` or `frozen` without [B]'s record. Statuses are `planned`, `in progress`, `validated`, and `frozen`; every AI handoff must state its operator code, changed paths, current status, evidence paths, and next owner.
+Before editing, read `01_architecture/full-problem-architecture.md`, `01_architecture/model-decision-log.md`, and `08_results/final-results.md` in addition to this file. Record each material route decision in the decision log and never mark a task `validated` or `frozen` without the designated Validation Lead's record. Statuses are `planned`, `in progress`, `validated`, and `frozen`; every AI handoff must state its actual operator code, changed paths, current status, evidence paths, and next owner.
 
 # LaTeX Result Document Workflow
 
@@ -135,6 +137,14 @@ Before editing, read `01_architecture/full-problem-architecture.md`, `01_archite
 Before a result task, read AGENTS, the project README, relevant TEX, code/data/results registry/validation records; inspect PDF only for requested visual or layout QA. Results use `08_results/q1/` through `q5/` (the current combined Q4/Q5 source is in `08_results/q4-q5/`); reviews use `05_validation/q*/`; the paper pair is `07_paper/main.tex` and `07_paper/main.pdf`; submission copies belong in `09_submission/`.
 
 Compile with XeLaTeX/latexmk into `.latex-build/<document-id>/`, then copy only the resulting same-name PDF beside TEX. Build intermediates are ignored; formal TEX and PDF are tracked. AI may edit and compile locally but may not push or alter remote state.
+
+# CSV Data Workflow
+
+CSV is the traceable interface between programs, figures, and papers. Store raw immutable inputs in `03_data/raw/`, reproducible transformations in `03_data/processed/`, important process data in `08_results/intermediate/`, review evidence in `05_validation/q*/`, and only Validation-Lead-validated outputs in `08_results/final/`. Do not hand-edit raw data or promote an intermediate CSV to formal results without Validation Lead review and an update to `08_results/final-results.md`.
+
+Use UTF-8 comma-separated CSV with a header, `snake_case` names where new files are created, explicit missing-value conventions, no implicit DataFrame index, and no units embedded in numeric values. Important CSV must be traceable to source data and a generating script; the Modeling Lead owns model-process data, the Validation Lead owns audits/validation/formal result registration, and the Paper Lead reads rather than changes formal numeric CSV. AI must inspect context, generating code, fields, and status before interpreting a CSV; filenames alone are insufficient.
+
+After importing or generating important process, validation, or final CSV data, AI/Codex must run the applicable checks and create a focused **local** Git commit automatically. It must never automatically push that commit, delete remote content, or force-push; remote upload remains a human action.
 
 ## Naming rules
 

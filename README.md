@@ -25,7 +25,7 @@
 | `contest/<题目>` | 正式竞赛项目 | `main`（比赛结束且允许归档后） |
 | `coursework/<项目>` | 课程作业 | `main`（完成归档后） |
 
-当前训练项目为 `practice/apmcm-2026-b`。三位成员直接在该项目分支协作，并以目录责任区分工作：[A] 负责架构、代码与图表；[B] 负责数据、验证与正式数值；[C] 负责论文与提交文件。项目结束后使用标签（如 `apmcm-2026-b-v1.0`）标记正式版本。
+当前训练项目为 `practice/apmcm-2026-b`。`[A]`、`[B]`、`[C]` 是操作人编码，不绑定固定角色；每次对话开始须确认实际操作人。当前 Agent 已确认使用 `[A]`，因此其本地操作与提交一律使用 `[A]`。项目角色依目录责任区分工作，项目结束后使用标签（如 `apmcm-2026-b-v1.0`）标记正式版本。
 
 ```text
 main
@@ -75,17 +75,17 @@ AI 可自动进行本地读写、测试与本地提交；所有远端上传、�
 ## Current project: APMCM 2026 Problem B
 
 - Project branch: `practice/apmcm-2026-b`
-- Workflow: [A] produces model V0; [B] independently validates and strengthens it; [C] writes the paper; [A] performs the final technical review.
+- Workflow: the Modeling Lead produces model V0; the Validation Lead independently validates it; the Paper Lead writes the paper; the designated technical reviewer performs final review. Operator codes are recorded separately.
 
-| Member | Role | Primary directories |
+| Role | Operator assignment | Primary directories |
 | --- | --- | --- |
-| [A] | Modeling Lead | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` |
-| [B] | Validation Lead | `03_data/`, `05_validation/`, `08_results/` |
-| [C] | Paper Lead | `07_paper/`, `09_submission/` |
+| Modeling Lead | designated per task | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` |
+| Validation Lead | designated per task | `03_data/`, `05_validation/`, `08_results/` |
+| Paper Lead | designated per task | `07_paper/`, `09_submission/` |
 
-`07_paper/main.tex` is maintained by [C]. [A] and [B] place paper material in their respective `paper-notes/` directories and do not overwrite `main.tex`. `08_results/final-results.md` is the only source of formal numeric values. Team members must not edit the same file at the same time.
+`07_paper/main.tex` is maintained by the designated Paper Lead. The Modeling Lead and Validation Lead place paper material in their respective `paper-notes/` directories and do not overwrite `main.tex`. `08_results/final-results.md` is the only source of formal numeric values. Team members must not edit the same file at the same time.
 
-Before work: `git switch practice/apmcm-2026-b` then `git pull --rebase origin practice/apmcm-2026-b`. Before committing: run `git status`, stage specific paths, commit with a message such as `[B][REVIEW] validate surrogate model`, then manually run a rebase pull and normal push. AI may make local changes and commits only; a team member must manually push, and force push is prohibited.
+Before work: `git switch practice/apmcm-2026-b` then `git pull --rebase origin practice/apmcm-2026-b`. Before committing: run `git status`, stage specific paths, and use the confirmed operator code (currently `[A]`), e.g. `[A][REVIEW] validate surrogate model`; then manually run a rebase pull and normal push. AI may make local changes and commits only; a team member must manually push, and force push is prohibited.
 
 ## Project directory status
 
@@ -115,3 +115,7 @@ Formal stage results use same-name `.tex + .pdf` pairs. TEX is the editable sour
 | Q3 optimization | `08_results/q3/q3-multi-objective-optimization.tex` | `08_results/q3/q3-multi-objective-optimization.pdf` | [A]/[B] | imported; not revalidated |
 | Q4–Q5 combined analysis | `08_results/q4-q5/q4-q5-robustness-analysis.tex` | `08_results/q4-q5/q4-q5-robustness-analysis.pdf` | [A]/[B] | combined source; split deferred |
 | Full paper draft | `07_paper/main.tex` | `07_paper/main.pdf` | [C] | imported draft |
+
+## CSV data management
+
+CSV files preserve important program-to-paper evidence. Raw inputs are read-only in `03_data/raw/`; reproducible transformations live in `03_data/processed/`; model process data live in `08_results/intermediate/`; review evidence lives in `05_validation/`; only [B]-validated formal outputs may enter `08_results/final/`. [C] does not alter formal numeric CSV, and formal paper values remain governed by `08_results/final-results.md`.
