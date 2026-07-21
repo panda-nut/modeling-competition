@@ -10,6 +10,14 @@ The required workflow is:
 
 Files under version control are the source of truth. AI chat history, screenshots, and unverified generated text are not evidence.
 
+> Default Git behavior:
+>
+> - Automatically write valid local files.
+> - Automatically stage relevant non-ignored files after checks.
+> - Automatically create a local commit after checks.
+> - Never push to a remote repository without explicit permission in the current request.
+> - Never use force push without separate explicit permission.
+
 ## Branch policy
 
 | Branch pattern | Purpose |
@@ -75,30 +83,54 @@ Before every task, an AI/Codex must:
 3. Confirm its operator code; use the recorded current code `[A]` unless the user explicitly changes it. Identify intended directories/files and possible overlap with others' work.
 4. Check that it will not overwrite another member's uncommitted work.
 
-Default local flow:
+Default local inspection flow:
 
 ```bash
 git switch practice/apmcm-2026-b
 git status
-git pull --rebase origin practice/apmcm-2026-b
+git status --ignored --short
 ```
 
-If networking is unavailable, skip the pull only after explicitly reporting it. AI may create/move/edit local files, run code and tests, generate local figures, format files, and create local commits. AI must not automatically push, delete a remote branch, create a remote release, alter GitHub settings, or force-push.
+AI may create/move/edit local files, run code and tests, generate local figures, format files, stage relevant files, and create local commits. It must stop if a merge, rebase, or cherry-pick is unfinished, a conflict exists, or branch identity is unsafe. Never use `git reset --hard`, `git clean -fd`, `git checkout -- .`, `git restore .`, or automatic stash.
 
-After a local change: run relevant validation, `git diff --check`, `git status`, inspect staged paths, make a focused local commit, summarize the change, and provide manual upload commands. Prefer `git add <specific-paths>`; use `git add .` only when all changed files are confirmed relevant.
+After a clear task with actual changes, AI must run relevant validation, `git diff --check`, `git status --short`, and `git status --ignored --short`; inspect relevant files; use precise `git add <paths>`; inspect `git diff --cached --name-status` and `git diff --cached --stat`; and automatically create one focused local commit. Do not create an empty commit. Do not use `git add -f`, and do not use `git add .` without an explicit reviewed scope.
 
-## Human remote-upload process
+# Automatic Local Commit and Remote Push Permission Policy
 
-Humans alone confirm and execute remote writes:
+## Terminology
+
+- **Local file write**: create, edit, move, or delete local working-tree files.
+- **Local staging**: `git add` places reviewed changes in the index.
+- **Local commit**: `git commit` records staged changes in the local repository.
+- **Remote push**: `git push` uploads local commits to a remote repository.
+
+“Automatic local save” means `write → check → stage → local commit`; it never includes remote push.
+
+## Automatic local commit
+
+After each explicit task, automatically stage and locally commit valid task files unless the user prohibits local commits. Include task-created/modified/moved/deleted non-ignored files, formal TEX/PDF, important CSV, Markdown, code, validation evidence, figures, and required README/AGENTS/.gitignore updates. Exclude ignored files, caches, temporary/editor files, LaTeX auxiliaries, meaningless test output, unrelated files, suspected sensitive data, and files over 50 MB unless the user explicitly authorizes a review.
+
+If pre-existing changes are present, never overwrite or discard them. Include them only when their origin and relevance are clear; otherwise leave them unstaged and report them. Stage exact paths by default. Before commit, inspect staged names/stat and textual diff; for binary files inspect expected path, size, and source match instead of treating `git diff --check` binary output as a text failure.
+
+Run task-appropriate checks: syntax/tests for code; compilation and paired PDF checks for modified TEX; readability/header/shape checks for CSV; path/link/code-fence checks for Markdown. Check for likely secrets (`sk-`, `ghp_`, `github_pat_`, `Bearer`, `api_key`, `password`, `secret`, `token`, `BEGIN PRIVATE KEY`) without exposing values. Do not commit suspected secrets. Check file sizes: under 10 MB is normal, 10–50 MB needs necessity review, over 50 MB requires user direction; never auto-enable Git LFS.
+
+## Ignore policy
+
+Before staging, inspect both `git status --short` and `git status --ignored --short`. Ignored files are not staged; do not bypass rules with `git add -f`. Correct `.gitignore` only when a formal task file is wrongly ignored, then verify with `git check-ignore -v <path>` and include the justified `.gitignore` update in the local commit.
+
+## Remote push permission
+
+Remote push is prohibited by default. It requires an explicit current-user request such as “允许远程推送”, “请执行 git push”, “把本地提交推送到 origin”, or “现在可以上传远程仓库”. “保存”、“提交”、“同步文件” and similar wording authorizes only local work.
+
+Even after current explicit push approval, first verify `git status`, current branch, `git remote -v`, recent log, and `git fetch origin`; check for remote commits, rebase need, conflicts, sensitive files, and non-fast-forward risk. Never force-push without separate explicit current-task authorization. Never automatically delete remote branches, push tags, create releases, alter GitHub settings, or create pull requests.
+
+Without remote permission, report the local commit and provide but do not run:
 
 ```bash
 git switch practice/apmcm-2026-b
-git status
 git pull --rebase origin practice/apmcm-2026-b
 git push origin practice/apmcm-2026-b
 ```
-
-For `main`, use `git pull --rebase origin main` then `git push origin main`. Push a tag with `git push origin apmcm-2026-b-v1.0`. Delete an old remote branch only with `git push origin --delete <branch-name>`. On rejection, never force-push: pull with rebase, resolve conflicts, re-run checks, then perform a normal push.
 
 ## Commit messages
 
