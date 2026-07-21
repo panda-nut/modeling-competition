@@ -16,29 +16,25 @@
 
 ## 分支策略
 
-分支表示一次具体任务或阶段开发，不作为长期文件分类。`main` 只保存团队 SOP、公共模板和工具，以及已经归档的最终成果。
+分支表示一次比赛或项目，而不是成员、题目小问或阶段任务。`main` 只保存团队 SOP、公共模板和工具，以及已经归档的最终成果；一个项目只使用一个项目分支。
 
 | 分支模式 | 用途 | 合并目标 |
 | --- | --- | --- |
 | `main` | SOP、模板、公共工具、已完成项目 | — |
 | `practice/<题目>` | 训练题、课程作业、模拟赛 | `main`（完成归档后） |
 | `contest/<题目>` | 正式竞赛项目 | `main`（比赛结束且允许归档后） |
-| `feature/<模块>` | 单项开发，如模型、验证或论文 | 对应项目分支 |
-| `fix/<问题>` | 修复代码、公式、数值或图表问题 | 对应项目分支 |
+| `coursework/<项目>` | 课程作业 | `main`（完成归档后） |
 
-当前推荐的训练题协作关系：
+当前训练项目为 `practice/apmcm-2026-b`。三位成员直接在该项目分支协作，并以目录责任区分工作：M1 负责架构、代码与图表；M2 负责数据、验证与正式数值；M3 负责论文与提交文件。项目结束后使用标签（如 `apmcm-2026-b-v1.0`）标记正式版本。
 
 ```text
 main
 └── practice/apmcm-2026-b
-    ├── feature/q1-mechanism
-    ├── feature/q2-surrogate-review
-    └── feature/paper-framework
 ```
 
-正式国赛可按同样方式建立 `contest/cumcm-2026-b`，并从它创建 `feature/model-v0`、`feature/model-validation` 与 `feature/paper-draft`。每个阶段经 Pull Request 审核后合并回项目分支；项目完成后合并或归档至 `main`，例如创建标签 `apmcm-2026-b-v1.0`。
+正式国赛可建立 `contest/cumcm-2026-b`，课程作业可建立 `coursework/<项目名>`。每个项目完成后合并或归档至 `main`，例如创建标签 `apmcm-2026-b-v1.0`。
 
-请避免含义不明的分支名，如 `final`、`final-v2` 或 `really-final`；使用 `feature/q2-cross-validation`、`fix/q3-pareto-normalization` 这类可读名称。
+请避免含义不明的分支名，如 `final`、`final-v2` 或 `really-final`；也不保留 `develop`、`release` 等长期分支。
 
 ## 项目目录
 
@@ -73,3 +69,5 @@ main
 ## AI 与大文件管理
 
 仓库只提交能让队友复现和审核的源代码、配置、数据说明、最终图表和冻结成果。题目附件、文献 PDF、AI 对话记录、模型缓存、批量试验、临时导出和本地构建物默认不推送，具体规则见 [`.gitignore`](.gitignore)。如某份数据或产物确需共享，请先压缩/脱敏并在项目 README 中说明来源、版本、用途与获取方式；大文件建议使用 Git LFS 或受权限控制的云盘链接，而不是直接提交。
+
+AI 可自动进行本地读写、测试与本地提交；所有远端上传、远端分支删除、Release 和仓库设置修改均由团队成员人工确认执行，且不允许 force push。完整 AI 上下文、角色边界和上传流程见 [AGENTS.md](AGENTS.md)。
