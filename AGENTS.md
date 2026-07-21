@@ -6,7 +6,7 @@ This repository supports a three-member mathematical-modeling team across traini
 
 The required workflow is:
 
-`joint problem analysis → M1 architecture and model V0 → M2 reproduction, validation, and strengthening → M3 paper drafting → M1 final technical review → three-way cross-check → human remote upload`.
+`joint problem analysis → [A] architecture and model V0 → [B] reproduction, validation, and strengthening → [C] paper drafting → [A] final technical review → three-way cross-check → human remote upload`.
 
 Files under version control are the source of truth. AI chat history, screenshots, and unverified generated text are not evidence.
 
@@ -51,16 +51,16 @@ These are collaboration rules, not operating-system permissions.
 
 | Member | Role | Primary directories | Responsibilities |
 | --- | --- | --- | --- |
-| M1 | Modeling Lead | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` | architecture, literature, model V0, core code, formal figures, model choice, technical-boundary review |
-| M2 | Validation Lead | `03_data/`, `05_validation/`, `08_results/` | data audit, reproduction, baselines, cross-validation, convergence/sensitivity checks, formal result tables, numerical consistency |
-| M3 | Paper Lead | `07_paper/`, `09_submission/` | restatement, paper structure, sections, LaTeX, abstract, conclusion, references, submission files |
+| [A] | Modeling Lead | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` | architecture, literature, model V0, core code, formal figures, model choice, technical-boundary review |
+| [B] | Validation Lead | `03_data/`, `05_validation/`, `08_results/` | data audit, reproduction, baselines, cross-validation, convergence/sensitivity checks, formal result tables, numerical consistency |
+| [C] | Paper Lead | `07_paper/`, `09_submission/` | restatement, paper structure, sections, LaTeX, abstract, conclusion, references, submission files |
 
 Cross-role rules:
 
 1. Do not modify another member's primary files without stating the reason first.
 2. State the reason before making a cross-directory change.
-3. `07_paper/main.tex` is maintained by M3; M1 and M2 must not overwrite it.
-4. M1 writes paper material in `01_architecture/paper-notes/`; M2 writes paper material in `05_validation/paper-notes/`; M3 integrates it into `07_paper/sections/`.
+3. `07_paper/main.tex` is maintained by [C]; [A] and [B] must not overwrite it.
+4. [A] writes paper material in `01_architecture/paper-notes/`; [B] writes paper material in `05_validation/paper-notes/`; [C] integrates it into `07_paper/sections/`.
 5. `08_results/final-results.md` is the sole source of formal numerical values. Key values in abstracts, text, tables, and captions must match it.
 6. Do not have more than one person modify the same file simultaneously.
 
@@ -70,7 +70,7 @@ Before every task, an AI/Codex must:
 
 1. Read this `AGENTS.md`.
 2. Confirm the current branch and run `git status`.
-3. Identify its role (M1, M2, or M3), intended directories/files, and possible overlap with others' work.
+3. Identify its operator code ([A], [B], or [C]), intended directories/files, and possible overlap with others' work.
 4. Check that it will not overwrite another member's uncommitted work.
 
 Default local flow:
@@ -115,7 +115,11 @@ Use English, imperative verb phrases, and one clear task per commit. Allowed typ
 [CHORE] repository maintenance without model changes
 ```
 
-Optional member prefix examples: `[M1][MODEL] implement Q1 physical model`, `[M2][REVIEW] validate Q2 cross-validation pipeline`, `[M3][PAPER] draft Q2 methodology section`. Do not use vague messages such as `update files`, `changes`, or `final version`.
+Optional member prefix examples: `[A][MODEL] implement Q1 physical model`, `[B][REVIEW] validate Q2 cross-validation pipeline`, `[C][PAPER] draft Q2 methodology section`. Do not use vague messages such as `update files`, `changes`, or `final version`.
+
+## Progress management
+
+Before editing, read `01_architecture/full-problem-architecture.md`, `01_architecture/model-decision-log.md`, and `08_results/final-results.md` in addition to this file. Record each material route decision in the decision log and never mark a task `validated` or `frozen` without [B]'s record. Statuses are `planned`, `in progress`, `validated`, and `frozen`; every AI handoff must state its operator code, changed paths, current status, evidence paths, and next owner.
 
 ## Naming rules
 

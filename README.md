@@ -25,7 +25,7 @@
 | `contest/<题目>` | 正式竞赛项目 | `main`（比赛结束且允许归档后） |
 | `coursework/<项目>` | 课程作业 | `main`（完成归档后） |
 
-当前训练项目为 `practice/apmcm-2026-b`。三位成员直接在该项目分支协作，并以目录责任区分工作：M1 负责架构、代码与图表；M2 负责数据、验证与正式数值；M3 负责论文与提交文件。项目结束后使用标签（如 `apmcm-2026-b-v1.0`）标记正式版本。
+当前训练项目为 `practice/apmcm-2026-b`。三位成员直接在该项目分支协作，并以目录责任区分工作：[A] 负责架构、代码与图表；[B] 负责数据、验证与正式数值；[C] 负责论文与提交文件。项目结束后使用标签（如 `apmcm-2026-b-v1.0`）标记正式版本。
 
 ```text
 main
@@ -75,14 +75,31 @@ AI 可自动进行本地读写、测试与本地提交；所有远端上传、�
 ## Current project: APMCM 2026 Problem B
 
 - Project branch: `practice/apmcm-2026-b`
-- Workflow: M1 produces model V0; M2 independently validates and strengthens it; M3 writes the paper; M1 performs the final technical review.
+- Workflow: [A] produces model V0; [B] independently validates and strengthens it; [C] writes the paper; [A] performs the final technical review.
 
 | Member | Role | Primary directories |
 | --- | --- | --- |
-| M1 | Modeling Lead | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` |
-| M2 | Validation Lead | `03_data/`, `05_validation/`, `08_results/` |
-| M3 | Paper Lead | `07_paper/`, `09_submission/` |
+| [A] | Modeling Lead | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` |
+| [B] | Validation Lead | `03_data/`, `05_validation/`, `08_results/` |
+| [C] | Paper Lead | `07_paper/`, `09_submission/` |
 
-`07_paper/main.tex` is maintained by M3. M1 and M2 place paper material in their respective `paper-notes/` directories and do not overwrite `main.tex`. `08_results/final-results.md` is the only source of formal numeric values. Team members must not edit the same file at the same time.
+`07_paper/main.tex` is maintained by [C]. [A] and [B] place paper material in their respective `paper-notes/` directories and do not overwrite `main.tex`. `08_results/final-results.md` is the only source of formal numeric values. Team members must not edit the same file at the same time.
 
-Before work: `git switch practice/apmcm-2026-b` then `git pull --rebase origin practice/apmcm-2026-b`. Before committing: run `git status`, stage specific paths, commit with a message such as `[M2][REVIEW] validate surrogate model`, then manually run a rebase pull and normal push. AI may make local changes and commits only; a team member must manually push, and force push is prohibited.
+Before work: `git switch practice/apmcm-2026-b` then `git pull --rebase origin practice/apmcm-2026-b`. Before committing: run `git status`, stage specific paths, commit with a message such as `[B][REVIEW] validate surrogate model`, then manually run a rebase pull and normal push. AI may make local changes and commits only; a team member must manually push, and force push is prohibited.
+
+## Project directory status
+
+| Directory | Owner | Purpose | Current status |
+| --- | --- | --- | --- |
+| `00_problem` | [A] | immutable problem sources | imported |
+| `01_architecture` | [A] | architecture and decisions | in progress |
+| `02_references` | [A] | traceable literature | planned |
+| `03_data` | [B] | raw and processed data | raw imported |
+| `04_code` | [A] | Q1–Q5 programs | partial migration |
+| `05_validation` | [B] | checks and reviews | partial migration |
+| `06_figures` | [A] | formal figures | planned |
+| `07_paper` | [C] | LaTeX manuscript | draft migrated |
+| `08_results` | [B] | results registry | in progress |
+| `09_submission` | [C] | delivery files | planned |
+
+Empty directories use substantive README, templates, or indexes rather than only `.gitkeep`. Such files do not imply a model is complete; task status is governed by the architecture records and `08_results/final-results.md`.
