@@ -71,3 +71,18 @@ main
 仓库只提交能让队友复现和审核的源代码、配置、数据说明、最终图表和冻结成果。题目附件、文献 PDF、AI 对话记录、模型缓存、批量试验、临时导出和本地构建物默认不推送，具体规则见 [`.gitignore`](.gitignore)。如某份数据或产物确需共享，请先压缩/脱敏并在项目 README 中说明来源、版本、用途与获取方式；大文件建议使用 Git LFS 或受权限控制的云盘链接，而不是直接提交。
 
 AI 可自动进行本地读写、测试与本地提交；所有远端上传、远端分支删除、Release 和仓库设置修改均由团队成员人工确认执行，且不允许 force push。完整 AI 上下文、角色边界和上传流程见 [AGENTS.md](AGENTS.md)。
+
+## Current project: APMCM 2026 Problem B
+
+- Project branch: `practice/apmcm-2026-b`
+- Workflow: M1 produces model V0; M2 independently validates and strengthens it; M3 writes the paper; M1 performs the final technical review.
+
+| Member | Role | Primary directories |
+| --- | --- | --- |
+| M1 | Modeling Lead | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` |
+| M2 | Validation Lead | `03_data/`, `05_validation/`, `08_results/` |
+| M3 | Paper Lead | `07_paper/`, `09_submission/` |
+
+`07_paper/main.tex` is maintained by M3. M1 and M2 place paper material in their respective `paper-notes/` directories and do not overwrite `main.tex`. `08_results/final-results.md` is the only source of formal numeric values. Team members must not edit the same file at the same time.
+
+Before work: `git switch practice/apmcm-2026-b` then `git pull --rebase origin practice/apmcm-2026-b`. Before committing: run `git status`, stage specific paths, commit with a message such as `[M2][REVIEW] validate surrogate model`, then manually run a rebase pull and normal push. AI may make local changes and commits only; a team member must manually push, and force push is prohibited.
