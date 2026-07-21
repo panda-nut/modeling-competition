@@ -1,130 +1,66 @@
-# Repository AI Context and Collaboration Rules
+# Agent Required Reading: Mathematical Modeling Team Repository
 
-## Repository purpose
+> Read this file before every task. Current confirmed operator for this agent: **[A]**. Every action, handoff, generated-file attribution, and local commit made by this agent uses `[A]` until the user explicitly changes it.
 
-This repository supports a three-member mathematical-modeling team across training problems, mock contests, official contests, coursework, model code, technical review, paper writing, and final-result archiving.
+## 1. Purpose and non-negotiable facts
 
-The required workflow is:
+This repository supports training, mock contests, official contests, coursework, code, validation, paper writing, and archiving for a three-person mathematical-modeling team. Repository files are the source of truth; chat, screenshots, and unverified AI output are not evidence.
 
-`joint problem analysis → model V0 → reproduction and validation → paper drafting → technical review → cross-check → human remote upload`.
+`[A]`, `[B]`, and `[C]` identify operators, not fixed roles. Confirm the active operator at a new conversation unless recorded above. Modeling Lead, Validation Lead, and Paper Lead are assigned per task; do not infer them from an operator code.
 
-Files under version control are the source of truth. AI chat history, screenshots, and unverified generated text are not evidence.
+## 2. Required first-minute checklist
 
-> Default Git behavior:
->
-> - Automatically write valid local files.
-> - Automatically stage relevant non-ignored files after checks.
-> - Automatically create a local commit after checks.
-> - Never push to a remote repository without explicit permission in the current request.
-> - Never use force push without separate explicit permission.
+1. Read this file, root `README.md`, and the relevant task files.
+2. Run `git status --short`, `git status --ignored --short`, and `git branch --show-current`.
+3. Confirm the branch, operator, role, exact files to change, and any overlap with another person's uncommitted work.
+4. Stop for conflicts, unfinished merge/rebase/cherry-pick, unsafe branch identity, or unclear ownership.
+5. For project work also read `01_architecture/full-problem-architecture.md`, `01_architecture/model-decision-log.md`, and `08_results/final-results.md`.
 
-## Branch policy
+Never discard others' work. Do not use `git reset --hard`, `git clean -fd`, `git checkout -- .`, `git restore .`, or automatic stash.
 
-| Branch pattern | Purpose |
-| --- | --- |
-| `main` | SOP, paper templates, shared code utilities, checklists, and archived results |
-| `practice/<project-name>` | Training problem or mock contest |
-| `contest/<competition-year-problem>` | Official contest |
-| `coursework/<project-name>` | Coursework |
+## 3. Project structure and ownership
 
-The current project branch is `practice/apmcm-2026-b`. One contest or project uses exactly one project branch. Do not create long-lived member-, question-, or task-specific branches; do not use long-lived `develop`, `release`, or `final` branches. Mark a completed project with a Git tag, for example `apmcm-2026-b-v1.0`.
+| Area | Main responsibility | Purpose |
+| --- | --- | --- |
+| `00_problem/` | all, read-only | official problem and attachments |
+| `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` | Modeling Lead | route, model V0, code, formal figures |
+| `03_data/`, `05_validation/`, `08_results/` | Validation Lead | data audit, reproduction, validation, numeric registry |
+| `07_paper/`, `09_submission/` | Paper Lead | manuscript and delivery artifacts |
 
-## Required project layout
+`07_paper/main.tex` belongs to the designated Paper Lead. Modeling and validation notes go to their `paper-notes/` directories. `08_results/final-results.md` is the single formal numerical source: do not state a key number in paper, table, or caption unless it matches that file.
 
-All AI reads and writes on `practice/apmcm-2026-b` must follow this layout. Use `.gitkeep` for required empty directories.
+## 4. SOP: one-question rolling loop
 
 ```text
-00_problem/          # problem statement, attachments, original instructions
-01_architecture/     # full architecture, model V0, decision log
-02_references/       # literature and background
-03_data/
-  raw/                # immutable source data
-  processed/          # derived data
-04_code/
-  q1/ q2/ q3/ q4/ q5/ common/
-05_validation/
-  q1/ q2/ q3/ q4/ q5/
-06_figures/
-  q1/ q2/ q3/ q4/ q5/
-07_paper/
-  sections/ tables/ bibliography/ main.tex
-08_results/
-  intermediate/ final-results.md
-09_submission/       # final delivery files
+joint problem analysis
+  → parallel foundation (architecture / data+validation / paper framework)
+  → V0: Modeling Lead supplies runnable technical package
+  → V1: Validation Lead independently reproduces, tests, and may veto
+  → draft: Paper Lead writes only evidence-backed material
+  → review: technical meaning and claim boundary are checked
+  → Frozen: approved interface for the next question
 ```
 
-## Operator identity, role assignment, and logical write ownership
+V0 must define inputs, outputs, variables, units, constraints, assumptions, code entry point, preliminary evidence, alternatives, and risks. V1 must check data, units, formulas, constraints, reproducibility, baseline, error/convergence/sensitivity where relevant, and evidence boundaries. Do not write a formal conclusion from unreviewed V0. Freeze only after technical review; then preserve the handoff files and status.
 
-`[A]`, `[B]`, and `[C]` are **operator codes**, not permanent role labels. At the beginning of every new AI conversation, read this file and confirm the active operator with the user unless it is already recorded below. The confirmed operator for this agent and repository context is **`[A]`**; every commit, handoff, generated-file attribution, and local action performed by this agent uses `[A]`.
+## 5. Status, evidence, and file rules
 
-Do not infer a person's modeling, validation, or paper role from an operator code. Roles are assigned explicitly per task or project. The following are responsibility areas, not a mapping to `[A]/[B]/[C]`:
+Use only `planned`, `in progress`, `validated`, and `frozen`. Every material handoff records operator code, changed paths, status, evidence paths, risks, and next owner. Never fabricate data, literature, experiments, citations, or results.
 
-| Role | Primary directories | Responsibilities |
-| --- | --- | --- | --- |
-| Modeling Lead | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` | architecture, literature, model V0, core code, formal figures, model choice, technical-boundary review |
-| Validation Lead | `03_data/`, `05_validation/`, `08_results/` | data audit, reproduction, baselines, cross-validation, convergence/sensitivity checks, formal result tables, numerical consistency |
-| Paper Lead | `07_paper/`, `09_submission/` | restatement, paper structure, sections, LaTeX, abstract, conclusion, references, submission files |
+- Raw data in `03_data/raw/` are immutable; derivations go in `03_data/processed/`.
+- Important process CSV goes in `08_results/intermediate/`; validation CSV in `05_validation/q*/`; only Validation-Lead-approved data enters `08_results/final/` and the numerical registry.
+- TEX is the editable authoritative result source; same-basename PDF is human preview. Edit TEX, never PDF; recompile after TEX changes. TEX/PDF conflicts resolve in favor of TEX.
+- Names use lowercase English, digits, hyphens/underscores, no status words in filenames. Use Git commits/tags for versions.
 
-Cross-role rules:
+## 6. Automatic local commit; remote permission
 
-1. Do not modify another member's primary files without stating the reason first.
-2. State the reason before making a cross-directory change.
-3. `07_paper/main.tex` is maintained by the designated Paper Lead; other operators must not overwrite it.
-4. The Modeling Lead writes paper material in `01_architecture/paper-notes/`; the Validation Lead writes paper material in `05_validation/paper-notes/`; the Paper Lead integrates it into `07_paper/sections/`.
-5. `08_results/final-results.md` is the sole source of formal numerical values. Key values in abstracts, text, tables, and captions must match it.
-6. Do not have more than one person modify the same file simultaneously.
+Terms: local write = edit files; local staging = `git add`; local commit = `git commit`; remote push = `git push`.
 
-## AI local-work rules
+After each explicit task with valid changes, automatically run task-appropriate validation and `git diff --check`; stage exact relevant non-ignored paths; inspect staged names/stat and text diff; then create one focused local commit with the current operator prefix, e.g. `[A][MODEL] implement Q1 physical model`. Do not create an empty commit. Do not stage caches, editor files, LaTeX auxiliaries, unrelated files, suspected secrets, or files over 50 MB without direction. Check suspected secret patterns without printing values.
 
-Before every task, an AI/Codex must:
+Remote push is forbidden unless the current request explicitly says `git push`, remote push/upload, or equivalent and names an unambiguous target. Previous permission never carries forward. Before an authorized push, inspect status, branch, remote, recent log, and fetch; stop for conflicts or non-fast-forward risk. Force push, remote deletion, tag push, release, PR, and settings changes each need separate explicit authorization.
 
-1. Read this `AGENTS.md`.
-2. Confirm the current branch and run `git status`.
-3. Confirm its operator code; use the recorded current code `[A]` unless the user explicitly changes it. Identify intended directories/files and possible overlap with others' work.
-4. Check that it will not overwrite another member's uncommitted work.
-
-Default local inspection flow:
-
-```bash
-git switch practice/apmcm-2026-b
-git status
-git status --ignored --short
-```
-
-AI may create/move/edit local files, run code and tests, generate local figures, format files, stage relevant files, and create local commits. It must stop if a merge, rebase, or cherry-pick is unfinished, a conflict exists, or branch identity is unsafe. Never use `git reset --hard`, `git clean -fd`, `git checkout -- .`, `git restore .`, or automatic stash.
-
-After a clear task with actual changes, AI must run relevant validation, `git diff --check`, `git status --short`, and `git status --ignored --short`; inspect relevant files; use precise `git add <paths>`; inspect `git diff --cached --name-status` and `git diff --cached --stat`; and automatically create one focused local commit. Do not create an empty commit. Do not use `git add -f`, and do not use `git add .` without an explicit reviewed scope.
-
-# Automatic Local Commit and Remote Push Permission Policy
-
-## Terminology
-
-- **Local file write**: create, edit, move, or delete local working-tree files.
-- **Local staging**: `git add` places reviewed changes in the index.
-- **Local commit**: `git commit` records staged changes in the local repository.
-- **Remote push**: `git push` uploads local commits to a remote repository.
-
-“Automatic local save” means `write → check → stage → local commit`; it never includes remote push.
-
-## Automatic local commit
-
-After each explicit task, automatically stage and locally commit valid task files unless the user prohibits local commits. Include task-created/modified/moved/deleted non-ignored files, formal TEX/PDF, important CSV, Markdown, code, validation evidence, figures, and required README/AGENTS/.gitignore updates. Exclude ignored files, caches, temporary/editor files, LaTeX auxiliaries, meaningless test output, unrelated files, suspected sensitive data, and files over 50 MB unless the user explicitly authorizes a review.
-
-If pre-existing changes are present, never overwrite or discard them. Include them only when their origin and relevance are clear; otherwise leave them unstaged and report them. Stage exact paths by default. Before commit, inspect staged names/stat and textual diff; for binary files inspect expected path, size, and source match instead of treating `git diff --check` binary output as a text failure.
-
-Run task-appropriate checks: syntax/tests for code; compilation and paired PDF checks for modified TEX; readability/header/shape checks for CSV; path/link/code-fence checks for Markdown. Check for likely secrets (`sk-`, `ghp_`, `github_pat_`, `Bearer`, `api_key`, `password`, `secret`, `token`, `BEGIN PRIVATE KEY`) without exposing values. Do not commit suspected secrets. Check file sizes: under 10 MB is normal, 10–50 MB needs necessity review, over 50 MB requires user direction; never auto-enable Git LFS.
-
-## Ignore policy
-
-Before staging, inspect both `git status --short` and `git status --ignored --short`. Ignored files are not staged; do not bypass rules with `git add -f`. Correct `.gitignore` only when a formal task file is wrongly ignored, then verify with `git check-ignore -v <path>` and include the justified `.gitignore` update in the local commit.
-
-## Remote push permission
-
-Remote push is prohibited by default. It requires an explicit current-user request such as “允许远程推送”, “请执行 git push”, “把本地提交推送到 origin”, or “现在可以上传远程仓库”. “保存”、“提交”、“同步文件” and similar wording authorizes only local work.
-
-Even after current explicit push approval, first verify `git status`, current branch, `git remote -v`, recent log, and `git fetch origin`; check for remote commits, rebase need, conflicts, sensitive files, and non-fast-forward risk. Never force-push without separate explicit current-task authorization. Never automatically delete remote branches, push tags, create releases, alter GitHub settings, or create pull requests.
-
-Without remote permission, report the local commit and provide but do not run:
+Without push permission, report the local commit and only show (never run):
 
 ```bash
 git switch practice/apmcm-2026-b
@@ -132,60 +68,6 @@ git pull --rebase origin practice/apmcm-2026-b
 git push origin practice/apmcm-2026-b
 ```
 
-## Commit messages
+## 7. Before handoff
 
-Use English, imperative verb phrases, and one clear task per commit. Allowed types are:
-
-```text
-[ARCH] repository architecture and modeling framework
-[MODEL] model implementation or improvement
-[DATA] data import, cleaning, or transformation
-[REVIEW] model validation and technical review
-[PAPER] paper writing or LaTeX update
-[FIGURE] figure generation or standardization
-[RESULT] numerical result update
-[FIX] correction of code, formula, figure, or value
-[FINAL] freeze final result or submission
-[CHORE] repository maintenance without model changes
-```
-
-Prefix every commit with the actual operator code. Current-agent examples: `[A][MODEL] implement Q1 physical model`, `[A][REVIEW] validate Q2 cross-validation pipeline`, `[A][PAPER] draft Q2 methodology section`. Do not use a different code unless the user explicitly reassigns the operator.
-
-## Progress management
-
-Before editing, read `01_architecture/full-problem-architecture.md`, `01_architecture/model-decision-log.md`, and `08_results/final-results.md` in addition to this file. Record each material route decision in the decision log and never mark a task `validated` or `frozen` without the designated Validation Lead's record. Statuses are `planned`, `in progress`, `validated`, and `frozen`; every AI handoff must state its actual operator code, changed paths, current status, evidence paths, and next owner.
-
-# LaTeX Result Document Workflow
-
-## File roles and pairing
-
-- `.tex` is the editable source of a formal result document. AI reads, analyzes, edits, and resolves conflicts at the TEX layer; models, formulas, prose, tables, figure references, and conclusions are governed by TEX.
-- A same-basename `.pdf` is the human-reading preview. Do not directly edit PDF, use it as default AI input, or reverse-engineer TEX from a PDF. If TEX and PDF differ, TEX wins and must be recompiled.
-- Keep formal pairs in the same directory, e.g. `q2-surrogate-model.tex` and `q2-surrogate-model.pdf`. Never use state filenames such as `final.pdf` or `latest.pdf`; versions use commits and tags.
-- After modifying TEX, rebuild its PDF. If compilation fails, preserve the previous working PDF, report the first error, and do not create an empty replacement.
-
-## Reading, directories, and compilation
-
-Before a result task, read AGENTS, the project README, relevant TEX, code/data/results registry/validation records; inspect PDF only for requested visual or layout QA. Results use `08_results/q1/` through `q5/` (the current combined Q4/Q5 source is in `08_results/q4-q5/`); reviews use `05_validation/q*/`; the paper pair is `07_paper/main.tex` and `07_paper/main.pdf`; submission copies belong in `09_submission/`.
-
-Compile with XeLaTeX/latexmk into `.latex-build/<document-id>/`, then copy only the resulting same-name PDF beside TEX. Build intermediates are ignored; formal TEX and PDF are tracked. AI may edit and compile locally but may not push or alter remote state.
-
-# CSV Data Workflow
-
-CSV is the traceable interface between programs, figures, and papers. Store raw immutable inputs in `03_data/raw/`, reproducible transformations in `03_data/processed/`, important process data in `08_results/intermediate/`, review evidence in `05_validation/q*/`, and only Validation-Lead-validated outputs in `08_results/final/`. Do not hand-edit raw data or promote an intermediate CSV to formal results without Validation Lead review and an update to `08_results/final-results.md`.
-
-Use UTF-8 comma-separated CSV with a header, `snake_case` names where new files are created, explicit missing-value conventions, no implicit DataFrame index, and no units embedded in numeric values. Important CSV must be traceable to source data and a generating script; the Modeling Lead owns model-process data, the Validation Lead owns audits/validation/formal result registration, and the Paper Lead reads rather than changes formal numeric CSV. AI must inspect context, generating code, fields, and status before interpreting a CSV; filenames alone are insufficient.
-
-After importing or generating important process, validation, or final CSV data, AI/Codex must run the applicable checks and create a focused **local** Git commit automatically. It must never automatically push that commit, delete remote content, or force-push; remote upload remains a human action.
-
-## Naming rules
-
-- Use lowercase English letters, digits, hyphens, and underscores only; no spaces, Chinese names, parentheses, repeated separators, or state words such as `final`, `latest`, `new`, `new2`, `final-v2`.
-- Extensions are lowercase; use commits and tags, not filenames, for versioning. Dates use `YYYY-MM-DD`.
-- Ordinary directories and Markdown files use kebab-case: `surrogate-model/`, `paper-notes/`, `full-problem-architecture.md`, `q2-validation-report.md`. Keep `README.md`, `AGENTS.md`, `LICENSE`, and `CHANGELOG.md` uppercase.
-- Python files use snake_case, e.g. `load_data.py`, `fit_surrogate_model.py`; notebooks use `q1_exploratory_analysis.ipynb` style.
-- Data files use snake_case. Source files belong in `03_data/raw/` and must not be modified; corrected/derived files go to `03_data/processed/`.
-- Figures use `fig_q<question-number>_<sequence>_<topic>.<ext>` (for example `fig_q2_02_oof_predictions.pdf`). Keep PNG for previews and PDF/SVG for vectors; do not retain meaningless screenshots.
-- Tables use `table_q<question-number>_<sequence>_<topic>.<ext>`; result files use `q<question-number>_<topic>_results.<ext>`. The only formal all-project value table is `08_results/final-results.md`.
-- LaTeX root is `07_paper/main.tex`; section files are `01_problem_statement.tex`, `02_model_assumptions.tex`, `03_q1_physical_model.tex`, `04_q2_surrogate_model.tex`, `05_q3_optimization.tex`, `06_q4_preference_robustness.tex`, `07_q5_sensitivity_analysis.tex`, `08_model_evaluation.tex`, and `09_conclusion.tex`.
-- Logs use `YYYY-MM-DD-task-name.md`, for example `2026-07-21-branch-migration.md`.
+Report changed files, validation run/result, commit hash, `git status`, excluded files and reason, and whether a remote push occurred. State: `Remote push not executed: explicit remote permission was not granted.` unless it was explicitly authorized.
