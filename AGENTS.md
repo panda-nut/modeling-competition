@@ -121,6 +121,21 @@ Optional member prefix examples: `[A][MODEL] implement Q1 physical model`, `[B][
 
 Before editing, read `01_architecture/full-problem-architecture.md`, `01_architecture/model-decision-log.md`, and `08_results/final-results.md` in addition to this file. Record each material route decision in the decision log and never mark a task `validated` or `frozen` without [B]'s record. Statuses are `planned`, `in progress`, `validated`, and `frozen`; every AI handoff must state its operator code, changed paths, current status, evidence paths, and next owner.
 
+# LaTeX Result Document Workflow
+
+## File roles and pairing
+
+- `.tex` is the editable source of a formal result document. AI reads, analyzes, edits, and resolves conflicts at the TEX layer; models, formulas, prose, tables, figure references, and conclusions are governed by TEX.
+- A same-basename `.pdf` is the human-reading preview. Do not directly edit PDF, use it as default AI input, or reverse-engineer TEX from a PDF. If TEX and PDF differ, TEX wins and must be recompiled.
+- Keep formal pairs in the same directory, e.g. `q2-surrogate-model.tex` and `q2-surrogate-model.pdf`. Never use state filenames such as `final.pdf` or `latest.pdf`; versions use commits and tags.
+- After modifying TEX, rebuild its PDF. If compilation fails, preserve the previous working PDF, report the first error, and do not create an empty replacement.
+
+## Reading, directories, and compilation
+
+Before a result task, read AGENTS, the project README, relevant TEX, code/data/results registry/validation records; inspect PDF only for requested visual or layout QA. Results use `08_results/q1/` through `q5/` (the current combined Q4/Q5 source is in `08_results/q4-q5/`); reviews use `05_validation/q*/`; the paper pair is `07_paper/main.tex` and `07_paper/main.pdf`; submission copies belong in `09_submission/`.
+
+Compile with XeLaTeX/latexmk into `.latex-build/<document-id>/`, then copy only the resulting same-name PDF beside TEX. Build intermediates are ignored; formal TEX and PDF are tracked. AI may edit and compile locally but may not push or alter remote state.
+
 ## Naming rules
 
 - Use lowercase English letters, digits, hyphens, and underscores only; no spaces, Chinese names, parentheses, repeated separators, or state words such as `final`, `latest`, `new`, `new2`, `final-v2`.

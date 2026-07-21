@@ -103,3 +103,15 @@ Before work: `git switch practice/apmcm-2026-b` then `git pull --rebase origin p
 | `09_submission` | [C] | delivery files | planned |
 
 Empty directories use substantive README, templates, or indexes rather than only `.gitkeep`. Such files do not imply a model is complete; task status is governed by the architecture records and `08_results/final-results.md`.
+
+## LaTeX result documents
+
+Formal stage results use same-name `.tex + .pdf` pairs. TEX is the editable source and AI's default reading target; PDF is the human preview and must be regenerated after TEX changes. Intermediate compilation files are ignored, while formal TEX/PDF pairs are tracked. The complete paper is `07_paper/main.tex` / `07_paper/main.pdf`; result documents live in `08_results/`; `08_results/final-results.md` remains the sole formal numerical registry.
+
+| Document | TEX source | PDF preview | Owner | Status |
+| --- | --- | --- | --- | --- |
+| Q1 physical model | `08_results/q1/q1-physical-model.tex` | `08_results/q1/q1-physical-model.pdf` | [A] | imported; not revalidated |
+| Q2 surrogate model | `08_results/q2/q2-surrogate-model.tex` | `08_results/q2/q2-surrogate-model.pdf` | [A]/[B] | imported; not revalidated |
+| Q3 optimization | `08_results/q3/q3-multi-objective-optimization.tex` | `08_results/q3/q3-multi-objective-optimization.pdf` | [A]/[B] | imported; not revalidated |
+| Q4–Q5 combined analysis | `08_results/q4-q5/q4-q5-robustness-analysis.tex` | `08_results/q4-q5/q4-q5-robustness-analysis.pdf` | [A]/[B] | combined source; split deferred |
+| Full paper draft | `07_paper/main.tex` | `07_paper/main.pdf` | [C] | imported draft |

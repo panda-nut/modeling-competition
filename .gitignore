@@ -69,8 +69,38 @@ env/
 *.pth
 *.onnx
 
-# Reproducible local LaTeX build products; final delivery PDFs belong in 09_submission/
-/07_paper/*.pdf
+# LaTeX build directories and auxiliary files (formal TEX/PDF pairs are tracked)
+.latex-build/
+**/.latex-build/
+latex-build/
+**/latex-build/
+build/
+**/build/
+*.lof
+*.lot
+*.synctex
+*.xdv
+*.dvi
+*.ps
+*.run.xml
+*.idx
+*.ind
+*.ilg
+*.ist
+*.glo
+*.glg
+*.gls
+*.glsdefs
+*.acn
+*.acr
+*.alg
+*.vrb
+*.loa
+*.thm
+*.maf
+*.mtc
+*.mtc0
+*.mw
 
 # 操作系统与编辑器
 .DS_Store
