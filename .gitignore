@@ -1,0 +1,97 @@
+# 本地题目资料、文献与下载包：保留在本机/受控云盘，不直接推送
+/B题 高性能芯片热管理系统的优化问题（原题+题目附件）/
+/papers/
+/papers.zip
+/*.lnk
+
+# 本地运行输出与临时工作区（最终可复现图表应放入 projects/<项目>/08_figures/）
+/output/
+/outcome/
+/tmp/
+/scratch/
+/workspace/
+**/output/
+**/outputs/
+**/results/
+**/logs/
+**/cache/
+**/tmp/
+**/temp/
+
+# AI 工作过程：提示词试验、对话导出、自动生成草稿、模型缓存与批量推理结果
+/.agents/
+/.codex/
+/.ai/
+/.ai-workspace/
+**/ai_chat*/
+**/ai_output*/
+**/llm_cache*/
+**/model_cache*/
+**/prompt_history*/
+**/*_draft_ai.*
+
+# Python / R / Julia / notebook 本地环境与缓存
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+.Rhistory
+.RData
+.Rproj.user/
+*.jld2
+
+# 编译物、绘图中间物及大型二进制结果
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.tif
+*.tiff
+*.svg
+*.mp4
+*.zip
+*.7z
+*.rar
+*.npy
+*.npz
+*.pkl
+*.pickle
+*.joblib
+*.pt
+*.pth
+*.onnx
+
+# 操作系统与编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*~
+
+# 机密信息与本机配置（只提交 .env.example）
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
