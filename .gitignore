@@ -58,16 +58,6 @@ env/
 *.toc
 *.nav
 *.snm
-*.pdf
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.tif
-*.tiff
-*.svg
-*.mp4
-*.zip
 *.7z
 *.rar
 *.npy
