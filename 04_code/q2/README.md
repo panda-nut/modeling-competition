@@ -1,3 +1,3 @@
-# Question 2
+# Q2 程序
 
-Objective: build a surrogate with cross-validation, residual analysis, and stated domain. Expected output: prediction interface for Q3. Status: planned.
+Q2目标是建立结构参数到 `R/P/U` 的代理映射，并记录交叉验证、残差、基线和合法域。现有复核入口位于 `validation/q2_revision_analysis.py`；运行前必须先确认 Q3/Q4 依赖数据已经由新路径生成。

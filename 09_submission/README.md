@@ -1,3 +1,13 @@
-# Submission files
+# 提交材料
 
-Store only prepared or submitted deliverables here. Use Git tags for formal versions, expected `apmcm-2026-b-v1.0`; never store intermediate drafts here.
+本目录保存准备提交或已经提交的正式材料：
+
+| 路径 | 内容 |
+| --- | --- |
+| `paper/` | 正式整合论文 TEX、PDF、章节、表格和参考文献 |
+| `appendix/` | 竞赛要求的附录 |
+| `code/` | 最终提交代码包或说明 |
+| `ai-use-report/` | AI 使用说明、声明或报告 |
+| `submission-checklist.md` | 提交前强制检查清单 |
+
+不得把探索图、过程 CSV、LaTeX 辅助文件或未筛选代码放入本目录。远端上传和竞赛系统提交均需当前用户明确授权。

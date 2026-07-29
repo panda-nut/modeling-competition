@@ -1,61 +1,45 @@
-# Mathematical Modeling Team Workflow
+# 数学建模项目仓库
 
-三人数学建模团队的训练、课程作业与竞赛协作仓库。这里管理题面、数据、模型、复核、论文和最终归档；项目分支为 `practice/apmcm-2026-b`。
+本仓库用于管理题面、文献、数据、程序、图表、演示稿、冻结快照、论文参考结果和最终提交材料。当前项目分支为 `practice/apmcm-2026-b`，当前机器标识为 `[A]`。
 
-## 一张图看懂协作流程
+AI Agent 开始工作前必须完整阅读 [AGENTS.md](AGENTS.md)。`[A][B][C]` 只标识执行提交或推送的机器，不表示团队职责。
 
-```mermaid
-flowchart TD
-    S[三人共同破题\n变量、目标、约束、依赖与主/备路线] --> F[并行建底座\n架构 / 数据与验证 / 论文框架]
-    F --> V0[V0：建模与程序\n可运行技术包]
-    V0 --> G0{可独立运行？}
-    G0 -- 否 --> V0
-    G0 -- 是 --> V1[V1：独立复现与强化\n数据、单位、公式、约束、检验]
-    V1 --> G1{可信且边界清楚？}
-    G1 -- 否 --> V0
-    G1 -- 是 --> D[证据化成文\n图、表、程序支撑结论]
-    D --> G2{题目回答与结论边界正确？}
-    G2 -- 否 --> V1
-    G2 -- 是 --> Z[技术审核并冻结 Frozen]
-    Z --> N{还有下一问？}
-    N -- 是 --> V0
-    N -- 否 --> C[统一收口\n模型、图表、数字、全文与提交]
+## 当前结构
+
+| 目录 | 中文用途 | 主要入口 |
+| --- | --- | --- |
+| `00_progress/` | 进度与模型总览 | `progress-log.md`、`model-map.md` |
+| `01_problem/` | 官方题面与可读文本 | `README.md` |
+| `02_references/` | 文献、索引与引用 | `references-index.md` |
+| `03_data/` | 原始数据与处理 CSV | `README.md` |
+| `04_code/` | 建模、验证和绘图程序 | `README.md` |
+| `05_figures/` | 工作阶段图表 | `README.md` |
+| `06_drafts/` | 每问演示性 TEX/PDF | `README.md` |
+| `07_frozen/` | 经确认的冻结快照 | `README.md` |
+| `08_results/` | 论文写作参考结果 | `results-index.md` |
+| `09_submission/` | 正式提交材料 | `submission-checklist.md` |
+
+## 工作链
+
+```text
+题面与文献
+→ 原始数据
+→ 处理 CSV
+→ 建模/验证程序
+→ 绘图程序读取 CSV
+→ 演示性论文
+→ 复核
+→ 07_frozen 冻结
+→ 08_results 晋升
+→ 09_submission 正式提交
 ```
 
-每一问固定交付：**V0 技术包 → V1 复核包 → 论文段落 → Frozen 接口**。未经复核的 V0 不得成为正式结论；未冻结的结果不得作为下一问确定输入。
+工作进度、技术阶段和复核结论是三套独立字段：
 
-## 人员、角色与操作编码
-
-`[A]`、`[B]`、`[C]` 是操作人编码，不是固定岗位。每次新对话先确认操作人；当前 Agent 为 `[A]`，其提交一律以 `[A]` 开头。角色按任务指定：
-
-| 角色 | 主要目录 | 核心交付 |
-| --- | --- | --- |
-| Modeling Lead | `01_architecture/` `02_references/` `04_code/` `06_figures/` | 全题路线、V0、核心代码、正式图 |
-| Validation Lead | `03_data/` `05_validation/` `08_results/` | 数据审计、独立复现、检验、正式数字 |
-| Paper Lead | `07_paper/` `09_submission/` | 论文框架、正文、排版与提交文件 |
-
-## 项目目录速览
-
-| 目录 | 内容 | 关键规则 |
-| --- | --- | --- |
-| `00_problem/` | 题面与附件 | 原始材料不改写 |
-| `03_data/raw/` | 原始数据 | 只读 |
-| `03_data/processed/` | 可复现处理数据 | 必须能追溯到脚本 |
-| `04_code/` | Q1–Q5 程序 | 固定入口、记录随机性 |
-| `05_validation/` | 复核证据 | 由复核负责人维护 |
-| `06_figures/` | 正式图 | 图名、来源脚本清楚 |
-| `07_paper/` | `main.tex + main.pdf` | TEX 是源，PDF 是预览 |
-| `08_results/` | 过程/验证/正式数值 | `final-results.md` 唯一正式数字源 |
-| `09_submission/` | 待交/已交文件 | 不放中间稿 |
-
-## 文件与 Git 规则
-
-| 对象 | 规则 |
+| 类别 | 允许值 |
 | --- | --- |
-| TEX / PDF | 同名配对；只编辑 TEX，改后重新编译 PDF |
-| CSV | 原始/处理/过程/验证/正式数据分目录；未经复核不能写入最终结论 |
-| 文件名 | 小写英文、数字、`-`、`_`；版本由 Git 管理 |
-| 本地操作 | Agent 默认检查、精确暂存并创建本地提交 |
-| 远端操作 | 默认禁止；必须由当前请求明确授权 `git push` |
+| 工作进度 | `planned`、`in_progress`、`completed`、`blocked` |
+| 技术阶段 | `v0`、`v1`、`draft`、`frozen` |
+| 复核结论 | `pending`、`pass`、`pass_with_limits`、`reject` |
 
-开始任务、交接和提交的完整清单见 [AGENTS.md](AGENTS.md)。
+正式结果只能从 `07_frozen/` 晋升到 `08_results/`。未经冻结的过程 CSV、探索图和演示稿不能作为论文正式结论。

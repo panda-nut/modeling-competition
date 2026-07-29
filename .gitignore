@@ -4,12 +4,13 @@
 /papers.zip
 /*.lnk
 
-# 本地运行输出与临时工作区（最终可复现图表应放入 projects/<项目>/08_figures/）
+# 本地运行输出与临时工作区（最终可复现图表应放入 05_figures/）
 /output/
 /outcome/
 /tmp/
 /scratch/
 /workspace/
+00_progress/.working/
 **/output/
 **/outputs/
 **/results/

@@ -1,3 +1,7 @@
-# Raw data
+# 原始数据
 
-`apmcm-2026-b-appendix-2-data.xlsx` was imported unchanged from the official Appendix 2. Raw data are read-only; cleaning and features belong in `../processed/`.
+`apmcm-2026-b-appendix-2-data.xlsx` 是官方附件2的原始副本，必须保持字节不变。
+
+- 禁止修改、另存、重排工作表或修正单元格。
+- 清洗、类型转换、特征工程和切分结果写入 `../processed/`。
+- 程序读取路径统一从项目根目录解析，不得读取被 Git 忽略的本地中文重复目录。

@@ -1,3 +1,20 @@
-# Processed data registry
+# 处理数据
 
-Each derived file must state source file, generation script, date, rows, columns, and processing summary. No derived data have been registered yet.
+本目录只保存可由 `04_code/` 程序重建的 CSV/JSON。数据按问题和验证用途分目录。
+
+每个新文件必须登记：
+
+```text
+来源文件
+生成程序
+运行命令
+生成时间
+行数与列数
+字段与单位
+场景与缺失值规则
+随机种子
+SHA-256
+stage / review / Evidence ID
+```
+
+不得手工修正 CSV 后继续用于作图或论文。需要修改时先改程序，再重新生成。

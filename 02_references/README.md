@@ -1,3 +1,13 @@
-# References
+# 参考文献管理
 
-References support background, mechanisms, model choice, and method citation. Use traceable English filenames and never add AI-invented literature to the paper.
+先阅读 `references-index.md`，根据问题、主题和“可参考部分”定位文献；只有需要核对公式、实验条件、结论边界或原文引用时才打开 `pdf/` 中的具体文件。
+
+| 文件 | 用途 |
+| --- | --- |
+| `references-index.md` | 文献名称、类型、主要内容、可参考部分、阅读状态和路径 |
+| `references.bib` | 已核实并可供 LaTeX 使用的引用条目 |
+| `literature-search-log.md` | 文献检索与访问过程 |
+| `source-index.md` | 旧编号11—23下载来源记录，作为历史核验信息保留 |
+| `pdf/` | 本地已取得的文献全文 |
+
+禁止依据文件名或 AI 记忆虚构作者、期刊、页码、实验结果或 BibTeX 字段。索引标注“待细读”的文献不能被表述为已经核验全文。
