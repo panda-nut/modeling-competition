@@ -210,7 +210,8 @@ def main():
     candidates,best_i=candidate_table(x,f,pin,ideal,nadir); candidates.to_csv(DATA/"q3_compromise_candidates.csv",index=False,encoding="utf-8-sig")
     summary={"grid_search_seconds":elapsed,"grid_meta":grid_meta,"pareto_points":int(len(f)),"baseline_global_points":int(np.sum(x[:,2]==0)),"ideal":ideal.tolist(),"nadir":nadir.tolist(),"hypervolume":hypervolume3(z),"best_index":best_i}
     (LOG/"optimization_summary.json").write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding="utf-8")
-    write_tex(summary,candidates,payoff)
+    # 演示性论文由 06_drafts 中独立维护；模型复现只写入可审计数据产物，
+    # 避免运行数值程序时覆盖未审核的论文本。
     print(json.dumps(summary,ensure_ascii=False,indent=2))
 
 if __name__ == "__main__": main()

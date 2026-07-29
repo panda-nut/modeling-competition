@@ -1,0 +1,125 @@
+{
+  "evidence_id": "E-Q2-Q5-REPRO-001",
+  "generated_at": "2026-07-29 15:05:52 中国标准时间",
+  "machine": "[A]",
+  "interpreter": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "commands": [
+    ".venv\\Scripts\\python.exe 04_code\\q3\\model\\q3_multiobjective_optimization.py",
+    ".venv\\Scripts\\python.exe 04_code\\q3\\model\\q3_candidate_algorithm_comparison.py",
+    ".venv\\Scripts\\python.exe 04_code\\q3\\model\\q3_methodology_finalization.py",
+    ".venv\\Scripts\\python.exe 04_code\\q4\\model\\q45_preference_and_robustness.py",
+    ".venv\\Scripts\\python.exe 04_code\\q4\\model\\q45_final_revision.py",
+    ".venv\\Scripts\\python.exe 04_code\\q4\\model\\q45_evidence_boundary_revision.py",
+    ".venv\\Scripts\\python.exe 04_code\\q2\\validation\\q2_revision_analysis.py",
+    ".venv\\Scripts\\python.exe 04_code\\q2\\validation\\q2_q5_reproduction_validation.py"
+  ],
+  "checks": [
+    {
+      "检查项": "原始数据-哈希",
+      "通过": true,
+      "说明": "官方附件2工作簿 SHA-256 与登记值一致"
+    },
+    {
+      "检查项": "Q2-CV-行数",
+      "通过": true,
+      "说明": "四种编码均完成十次重复五折交叉验证"
+    },
+    {
+      "检查项": "Q2-CV-误差范围",
+      "通过": true,
+      "说明": "全部归一化 RMSE 位于 [0, 1)"
+    },
+    {
+      "检查项": "Q2-CV-主模型",
+      "通过": true,
+      "说明": "三次 Ridge 主模型的三响应 NRMSE 均低于 1%"
+    },
+    {
+      "检查项": "Q2-留出-范围",
+      "通过": true,
+      "说明": "三响应组合留出与最差组合 NRMSE 均低于 2%"
+    },
+    {
+      "检查项": "Q2-Q3-接口",
+      "通过": true,
+      "说明": "主代理重优化结果与 Q3 折中评分闭合"
+    },
+    {
+      "检查项": "Q3-设计域",
+      "通过": true,
+      "说明": "401 网格 Pareto 集含 16,858 点，均在合法有针肋设计域"
+    },
+    {
+      "检查项": "Q3-支配关系",
+      "通过": true,
+      "说明": "合并参考集不存在可检测的三目标支配点"
+    },
+    {
+      "检查项": "Q3-网格收敛",
+      "通过": true,
+      "说明": "网格加密时精确 HV 上升、IGD+ 下降"
+    },
+    {
+      "检查项": "Q3-随机重复",
+      "通过": true,
+      "说明": "20 个固定种子 NSGA-II 重复均生成指标"
+    },
+    {
+      "检查项": "Q3-折中方案",
+      "通过": true,
+      "说明": "连续精化折中解保持 N=6 且评分闭合"
+    },
+    {
+      "检查项": "Q4-权重覆盖",
+      "通过": true,
+      "说明": "H=50 单纯形覆盖 1,326 组非负归一权重，候选均合法"
+    },
+    {
+      "检查项": "Q4-评分闭环",
+      "通过": true,
+      "说明": "CSV 中带权增强切比雪夫评分可由固定尺度独立重算"
+    },
+    {
+      "检查项": "Q4-遗憾稳定",
+      "通过": true,
+      "说明": "H=25/50/100 下最小最大遗憾解均为 N=6，最坏遗憾一致"
+    },
+    {
+      "检查项": "Q4-遗憾非负",
+      "通过": true,
+      "说明": "候选相对同权重最优解的遗憾均非负"
+    },
+    {
+      "检查项": "Q5-域内风险",
+      "通过": true,
+      "说明": "正式加工风险仅包含鲁棒可行域设计，且均值 ≤ Q95 ≤ CVaR95"
+    },
+    {
+      "检查项": "Q5-工况情景",
+      "通过": true,
+      "说明": "S1--S3 与 A/B 六个情景均重建；结构鲁棒解未被误称为各情景最优"
+    },
+    {
+      "检查项": "Q5-SRC-适用性",
+      "通过": true,
+      "说明": "SRC 线性近似 R² 在 [0, 1] 内"
+    },
+    {
+      "检查项": "Q5-跨问最坏情形",
+      "通过": true,
+      "说明": "最坏情形重优化位于鲁棒可行域"
+    }
+  ],
+  "source_sha256": {
+    "03_data/raw/apmcm-2026-b-appendix-2-data.xlsx": "49edaf3a4d8e8ce58093790724340bd29f0a1ac083def122e4ab5f360a578409",
+    "03_data/processed/validation/q2/q2_encoding_cv.csv": "7c216356bd90d10b78572ac171d115143c927d6a1b8ba3111181795e443438e1",
+    "03_data/processed/validation/q2/q2_structured_holdout.csv": "5053769ba25694fdccd4a1f532d3cc73b000e541199346945e2d04da9135989c",
+    "03_data/processed/validation/q3/q3_model_reoptimization.csv": "77cdd8cc14c59a5d58c0b5b3e2d40827c378b6976b6816914333af4e2524aa31",
+    "03_data/processed/q3/q3_pareto_reference_merged.csv": "5507968a60a2980998cb23a4818957293ca5156d37fb73e79d49776ed1b48ecc",
+    "03_data/processed/q4/q4_weight_scan_H50.csv": "e18951d6e7ce04ce6f0138dcde4f269b5c07c725961657efc10e1b046ca79fee",
+    "03_data/processed/q5/q5_formal_domain_risk.csv": "f6e3ceaf18eba6d648d27671902393c9d589321b06f80dd613fd2d60fea5b44a",
+    "03_data/processed/q5/q5_operation_design_comparison.csv": "0426235abba7808b802adf82410584b5d8254574151f84d985910514cbe5e6a0"
+  },
+  "conclusion": "pass_with_limits：已在隔离 Python 3.14 环境从登记入口重建并通过独立产物检查；不等同于外部实验、物理机理或冻结批准。"
+}

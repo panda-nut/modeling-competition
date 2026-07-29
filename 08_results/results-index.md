@@ -5,9 +5,9 @@
 | 问题 | 工作进度 | 技术阶段 | 复核结论 | 冻结修订 | 结果摘要 | 说明 |
 | --- | --- | --- | --- | --- | --- | --- |
 | Q1 | in_progress | draft | pending | 无 | 无 | 现有演示稿已迁入 `06_drafts/q1/` |
-| Q2 | in_progress | v1 | pending | 无 | 无 | 现有验证数据位于 `03_data/processed/validation/q2/` |
-| Q3 | in_progress | draft | pending | 无 | 无 | 现有过程数据位于 `03_data/processed/q3/` |
-| Q4 | in_progress | draft | pending | 无 | 无 | 现有过程数据位于 `03_data/processed/q4/` |
-| Q5 | in_progress | draft | pending | 无 | 无 | 现有过程数据位于 `03_data/processed/q5/` |
+| Q2 | completed | v1 | pass_with_limits | 无 | 无 | 已有可复现验证证据；尚未冻结 |
+| Q3 | completed | v1 | pass_with_limits | 无 | 无 | 已有 Pareto/算法复现证据；尚未冻结 |
+| Q4 | completed | v1 | pass_with_limits | 无 | 无 | 已有权重/遗憾复现证据；尚未冻结 |
+| Q5 | completed | v1 | pass_with_limits | 无 | 无 | 已有域内风险复现证据；尚未冻结 |
 
 只有完成冻结并生成 `source-manifest.md` 后，才能在这里登记论文可引用数字。

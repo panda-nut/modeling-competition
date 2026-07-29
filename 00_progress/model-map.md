@@ -5,7 +5,7 @@
 | 问题 | 必答目标 | 输入 | 当前主要模型/方法 | 主要产出 | 下游接口 | 工作进度 | 技术阶段 | 复核结论 | 证据路径 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Q1 | 解释结构参数对三项性能的影响及指标意义 | 题面、结构附件、原始数据 | 传热与流动机理链、数据主效应分析 | 机理解释、变量作用方向、指标依据 | 为 Q2 提供变量、响应和合法域 | in_progress | draft | pending | `06_drafts/q1/` |
-| Q2 | 建立从结构参数到三项响应的代理映射 | 附件2数据、Q1变量定义 | 分段代理：有针肋 Ridge，无针肋 PCHIP | 代理模型、交叉验证、适用域 | 为 Q3 提供预测接口 | in_progress | v1 | pending | `03_data/processed/validation/q2/` |
-| Q3 | 构造 Pareto 前沿并推荐名义设计 | Q2代理接口 | 分层网格、NSGA-II、连续精化 | Pareto 集、候选比较、名义折中方案 | 为 Q4/Q5 提供候选与固定尺度 | in_progress | draft | pending | `03_data/processed/q3/`、`06_drafts/q3/` |
-| Q4 | 分析偏好变化并给出偏好鲁棒推荐 | Q3 Pareto 集、权重情景 | 权重单纯形、增强切比雪夫、最小最大遗憾 | 权重场景、遗憾比较、偏好鲁棒候选 | 为 Q5 提供候选设计 | in_progress | draft | pending | `03_data/processed/q4/`、`06_drafts/q4/` |
-| Q5 | 分析加工误差与工况扰动的敏感性和稳定性 | Q3/Q4候选、扰动情景 | LHS、CVaR、局部灵敏度、SRC、情景压力测试 | 风险比较、敏感性、保守推荐及边界 | 供最终论文结论使用 | in_progress | draft | pending | `03_data/processed/q5/`、`06_drafts/q4/` |
+| Q2 | 建立从结构参数到三项响应的代理映射 | 附件2数据、Q1变量定义 | 分段代理：有针肋 Ridge，无针肋 PCHIP | 代理模型、交叉验证、适用域 | 为 Q3 提供预测接口 | completed | v1 | pass_with_limits | `03_data/processed/validation/reproduction/` |
+| Q3 | 构造 Pareto 前沿并推荐名义设计 | Q2代理接口 | 分层网格、NSGA-II、连续精化 | Pareto 集、候选比较、名义折中方案 | 为 Q4/Q5 提供候选与固定尺度 | completed | v1 | pass_with_limits | `03_data/processed/q3/`、`03_data/processed/validation/reproduction/` |
+| Q4 | 分析偏好变化并给出偏好鲁棒推荐 | Q3 Pareto 集、权重情景 | 权重单纯形、增强切比雪夫、最小最大遗憾 | 权重场景、遗憾比较、偏好鲁棒候选 | 为 Q5 提供候选设计 | completed | v1 | pass_with_limits | `03_data/processed/q4/`、`03_data/processed/validation/reproduction/` |
+| Q5 | 分析加工误差与工况扰动的敏感性和稳定性 | Q3/Q4候选、扰动情景 | LHS、CVaR、局部灵敏度、SRC、情景压力测试 | 风险比较、敏感性、保守推荐及边界 | 供最终论文结论使用 | completed | v1 | pass_with_limits | `03_data/processed/q5/`、`03_data/processed/validation/reproduction/` |

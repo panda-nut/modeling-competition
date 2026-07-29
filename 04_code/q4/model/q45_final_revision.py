@@ -127,9 +127,7 @@ S1=(.80,.75,.25,.25)$，S2=(.50,.50,.50,.50)$，S3=(.20,.25,.80,.80)$，元组�
     tex=tex.replace('%', r'\%')
     tex=tex.replace(r'\textbf{ε_a}', r'\textbf{$\varepsilon_a$}').replace(r'\textbf{ε_b}', r'\textbf{$\varepsilon_b$}')
     tex=tex.replace(r'\textbf{s_m}', r'\textbf{$s_m$}').replace(r'\textbf{s_q}', r'\textbf{$s_q$}')
-    OUT.mkdir(parents=True, exist_ok=True)
-    (OUT/'q4-q5_demo.tex').write_text(tex,encoding='utf-8')
     summary={'pref':pref.to_dict(),'struct':{'a':float(sx[0]),'b':float(sx[1]),'N':float(sx[2])},'risk_improvement':float((nomr-strr)/nomr)}
-    (DATA/'q45_revision_summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf-8');q.write_odt(summary)
+    (DATA/'q45_revision_summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf-8')
     print(json.dumps(summary,ensure_ascii=False,indent=2))
 if __name__=='__main__':main()

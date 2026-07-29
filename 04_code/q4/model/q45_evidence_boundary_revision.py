@@ -96,7 +96,5 @@ U模型A的低风险解集中于$N=10$，模型B集中于$N=4$，且$a\approx.22
 最终工程推荐&$(.224006,4.4625,6)$&保守推荐&有数据支撑且具公差安全裕度\\\bottomrule\end{{tabular}}\end{{table}}
 因此，在附件现有数据下正式采用加工鲁棒方案；待获得不同流量、热负荷下的CFD或实验数据后，再判定采用$N=4$或$N=10$的工况专用方案。\end{{document}}'''
     tex=tex.replace('%',r'\%')
-    OUT.mkdir(parents=True, exist_ok=True)
-    (OUT/'q4-q5_demo.tex').write_text(tex,encoding='utf-8')
-    q.write_odt({'pref':{'a':.224932,'b':4.5,'N':6,'max_regret':1.158963},'struct':{'a':float(sx[0]),'b':float(sx[1]),'N':float(sx[2])}})
+    # 演示稿仅在确认的写作流程中更新；本入口只复现数据和证据边界。
 if __name__=='__main__':main()

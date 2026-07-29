@@ -298,10 +298,9 @@ def main():
     weights,pref,scen,conv=preference_analysis(ref_x,ref_f,ridge,pchip)
     nom=np.array([.2249317396262705,4.5,6.])
     struct,physical,struct_x=robust_analysis(ridge,pchip,nom,pref)
-    write_tex(pref,scen,conv,struct,physical,nom)
     summary={"pref":pref.to_dict(),"struct":{"a":float(struct_x.a),"b":float(struct_x.b),"N":float(struct_x.N)},"physical":physical.to_dict("records")}
     (DATA/"q45_summary.json").write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding="utf-8")
-    write_odt(summary)
+    # 06_drafts 的论文本与模型数据产出解耦，复现不自动改写草稿或 ODT。
     print(json.dumps(summary,ensure_ascii=False,indent=2))
 
 if __name__=="__main__": main()
