@@ -1,0 +1,97 @@
+name: Welcome and Submission Feedback
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+# This workflow only posts comments through the GitHub API.  It must not
+# check out or run code supplied by a pull request.
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  issue-welcome:
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Welcome issue author
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const message = [
+              `👋 @${context.actor}，感谢你提交 Issue。`,
+              '',
+              '我们已收到反馈。为便于后续处理，请尽量补充：',
+              '',
+              '- 问题的具体描述；',
+              '- 可复现步骤；',
+              '- 使用的系统或运行环境；',
+              '- 相关错误日志或截图；',
+              '',
+              `Issue 编号：#${context.issue.number}`
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: message
+            });
+
+  pull-request-welcome:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on pull request activity
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const action = context.payload.action;
+            const pr = context.payload.pull_request;
+            const shortSha = pr.head.sha.slice(0, 7);
+            const prNumber = context.issue.number;
+            let message;
+
+            if (action === 'opened') {
+              message = [
+                `👋 @${context.actor}，感谢你提交 Pull Request。`,
+                '',
+                `已收到 PR #${prNumber}。`,
+                '',
+                `最新提交：\`${shortSha}\``,
+                `源分支：\`${pr.head.ref}\``,
+                `目标分支：\`${pr.base.ref}\``,
+                '',
+                'CI 自动检查将开始运行，请留意 Checks 的结果。'
+              ].join('\n');
+            } else if (action === 'reopened') {
+              message = [
+                `🔄 @${context.actor}，PR #${prNumber} 已重新打开。`,
+                '',
+                `当前提交：\`${shortSha}\``,
+                '',
+                '自动检查将重新运行。'
+              ].join('\n');
+            } else if (action === 'synchronize') {
+              message = [
+                `✅ @${context.actor}，已收到新的代码提交。`,
+                '',
+                `PR 编号：#${prNumber}`,
+                `最新提交：\`${shortSha}\``,
+                `当前提交总数：${pr.commits}`,
+                '',
+                'CI 自动检查正在运行，请留意 Checks 的结果。'
+              ].join('\n');
+            } else {
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: message
+            });
