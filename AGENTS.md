@@ -1,130 +1,344 @@
-# Repository AI Context and Collaboration Rules
+# AI Agent Required Rules：数学建模项目仓库
 
-## Repository purpose
+> 本文件是提供给 AI Agent 的最高级仓库规则。当前机器标识：**[A]**。除非当前用户明确改变，所有本地操作记录、生成文件归属和 Git 提交均使用 `[A]`。
 
-This repository supports a three-member mathematical-modeling team across training problems, mock contests, official contests, coursework, model code, technical review, paper writing, and final-result archiving.
+## 1. 规则优先级与读取顺序
 
-The required workflow is:
-
-`joint problem analysis → M1 architecture and model V0 → M2 reproduction, validation, and strengthening → M3 paper drafting → M1 final technical review → three-way cross-check → human remote upload`.
-
-Files under version control are the source of truth. AI chat history, screenshots, and unverified generated text are not evidence.
-
-## Branch policy
-
-| Branch pattern | Purpose |
-| --- | --- |
-| `main` | SOP, paper templates, shared code utilities, checklists, and archived results |
-| `practice/<project-name>` | Training problem or mock contest |
-| `contest/<competition-year-problem>` | Official contest |
-| `coursework/<project-name>` | Coursework |
-
-The current project branch is `practice/apmcm-2026-b`. One contest or project uses exactly one project branch. Do not create long-lived member-, question-, or task-specific branches; do not use long-lived `develop`, `release`, or `final` branches. Mark a completed project with a Git tag, for example `apmcm-2026-b-v1.0`.
-
-## Required project layout
-
-All AI reads and writes on `practice/apmcm-2026-b` must follow this layout. Use `.gitkeep` for required empty directories.
+规则冲突时只按以下优先级处理：
 
 ```text
-00_problem/          # problem statement, attachments, original instructions
-01_architecture/     # full architecture, model V0, decision log
-02_references/       # literature and background
-03_data/
-  raw/                # immutable source data
-  processed/          # derived data
-04_code/
-  q1/ q2/ q3/ q4/ q5/ common/
-05_validation/
-  q1/ q2/ q3/ q4/ q5/
-06_figures/
-  q1/ q2/ q3/ q4/ q5/
-07_paper/
-  sections/ tables/ bibliography/ main.tex
-08_results/
-  intermediate/ final-results.md
-09_submission/       # final delivery files
+当前用户明确指令
+→ 根 AGENTS.md
+→ 根 README.md
+→ 当前目录 README.md
 ```
 
-## Roles and logical write ownership
+SOP、归档材料、模板和历史日志不是 Agent 规则来源；只有上述规则明确引用时才适用。
 
-These are collaboration rules, not operating-system permissions.
-
-| Member | Role | Primary directories | Responsibilities |
-| --- | --- | --- | --- |
-| M1 | Modeling Lead | `01_architecture/`, `02_references/`, `04_code/`, `06_figures/` | architecture, literature, model V0, core code, formal figures, model choice, technical-boundary review |
-| M2 | Validation Lead | `03_data/`, `05_validation/`, `08_results/` | data audit, reproduction, baselines, cross-validation, convergence/sensitivity checks, formal result tables, numerical consistency |
-| M3 | Paper Lead | `07_paper/`, `09_submission/` | restatement, paper structure, sections, LaTeX, abstract, conclusion, references, submission files |
-
-Cross-role rules:
-
-1. Do not modify another member's primary files without stating the reason first.
-2. State the reason before making a cross-directory change.
-3. `07_paper/main.tex` is maintained by M3; M1 and M2 must not overwrite it.
-4. M1 writes paper material in `01_architecture/paper-notes/`; M2 writes paper material in `05_validation/paper-notes/`; M3 integrates it into `07_paper/sections/`.
-5. `08_results/final-results.md` is the sole source of formal numerical values. Key values in abstracts, text, tables, and captions must match it.
-6. Do not have more than one person modify the same file simultaneously.
-
-## AI local-work rules
-
-Before every task, an AI/Codex must:
-
-1. Read this `AGENTS.md`.
-2. Confirm the current branch and run `git status`.
-3. Identify its role (M1, M2, or M3), intended directories/files, and possible overlap with others' work.
-4. Check that it will not overwrite another member's uncommitted work.
-
-Default local flow:
-
-```bash
-git switch practice/apmcm-2026-b
-git status
-git pull --rebase origin practice/apmcm-2026-b
-```
-
-If networking is unavailable, skip the pull only after explicitly reporting it. AI may create/move/edit local files, run code and tests, generate local figures, format files, and create local commits. AI must not automatically push, delete a remote branch, create a remote release, alter GitHub settings, or force-push.
-
-After a local change: run relevant validation, `git diff --check`, `git status`, inspect staged paths, make a focused local commit, summarize the change, and provide manual upload commands. Prefer `git add <specific-paths>`; use `git add .` only when all changed files are confirmed relevant.
-
-## Human remote-upload process
-
-Humans alone confirm and execute remote writes:
-
-```bash
-git switch practice/apmcm-2026-b
-git status
-git pull --rebase origin practice/apmcm-2026-b
-git push origin practice/apmcm-2026-b
-```
-
-For `main`, use `git pull --rebase origin main` then `git push origin main`. Push a tag with `git push origin apmcm-2026-b-v1.0`. Delete an old remote branch only with `git push origin --delete <branch-name>`. On rejection, never force-push: pull with rebase, resolve conflicts, re-run checks, then perform a normal push.
-
-## Commit messages
-
-Use English, imperative verb phrases, and one clear task per commit. Allowed types are:
+处理任务时按以下顺序读取：
 
 ```text
-[ARCH] repository architecture and modeling framework
-[MODEL] model implementation or improvement
-[DATA] data import, cleaning, or transformation
-[REVIEW] model validation and technical review
-[PAPER] paper writing or LaTeX update
-[FIGURE] figure generation or standardization
-[RESULT] numerical result update
-[FIX] correction of code, formula, figure, or value
-[FINAL] freeze final result or submission
-[CHORE] repository maintenance without model changes
+当前用户命令
+→ 当前目录 README.md
+→ 相关次级目录 README.md
+→ README 指向的索引或管理文件
+→ 本次需要处理的具体文件
 ```
 
-Optional member prefix examples: `[M1][MODEL] implement Q1 physical model`, `[M2][REVIEW] validate Q2 cross-validation pipeline`, `[M3][PAPER] draft Q2 methodology section`. Do not use vague messages such as `update files`, `changes`, or `final version`.
+不得为了“了解更多”无差别读取所有 PDF、CSV 或代码。先读管理文件定位，再读必要的具体文件。仓库文件是事实来源；聊天、截图、记忆和未验证的 AI 输出不是正式证据。若聊天与受版本管理文件冲突，报告冲突，不得静默选择。
 
-## Naming rules
+## 2. 机器标识
 
-- Use lowercase English letters, digits, hyphens, and underscores only; no spaces, Chinese names, parentheses, repeated separators, or state words such as `final`, `latest`, `new`, `new2`, `final-v2`.
-- Extensions are lowercase; use commits and tags, not filenames, for versioning. Dates use `YYYY-MM-DD`.
-- Ordinary directories and Markdown files use kebab-case: `surrogate-model/`, `paper-notes/`, `full-problem-architecture.md`, `q2-validation-report.md`. Keep `README.md`, `AGENTS.md`, `LICENSE`, and `CHANGELOG.md` uppercase.
-- Python files use snake_case, e.g. `load_data.py`, `fit_surrogate_model.py`; notebooks use `q1_exploratory_analysis.ipynb` style.
-- Data files use snake_case. Source files belong in `03_data/raw/` and must not be modified; corrected/derived files go to `03_data/processed/`.
-- Figures use `fig_q<question-number>_<sequence>_<topic>.<ext>` (for example `fig_q2_02_oof_predictions.pdf`). Keep PNG for previews and PDF/SVG for vectors; do not retain meaningless screenshots.
-- Tables use `table_q<question-number>_<sequence>_<topic>.<ext>`; result files use `q<question-number>_<topic>_results.<ext>`. The only formal all-project value table is `08_results/final-results.md`.
-- LaTeX root is `07_paper/main.tex`; section files are `01_problem_statement.tex`, `02_model_assumptions.tex`, `03_q1_physical_model.tex`, `04_q2_surrogate_model.tex`, `05_q3_optimization.tex`, `06_q4_preference_robustness.tex`, `07_q5_sensitivity_analysis.tex`, `08_model_evaluation.tex`, and `09_conclusion.tex`.
-- Logs use `YYYY-MM-DD-task-name.md`, for example `2026-07-21-branch-migration.md`.
+- `[A]`、`[B]`、`[C]` 只标识执行本地提交或远端推送的机器/GitHub 账户。
+- 机器标识不表示建模、验证、论文或目录职责，不据此限制文件编辑权限。
+- 不根据文件类型、作者文字或目录推断机器标识。
+- 当前机器固定使用 `[A]`；只有当前用户明确要求时才切换。
+- Git 提交标题、进度日志、冻结清单和晋升清单必须记录机器标识。
+
+## 3. 每次任务的启动检查
+
+每次任务开始必须：
+
+1. 完整读取本文件、根 `README.md` 和相关目录 `README.md`。
+2. 读取 `00_progress/progress-log.md`、`00_progress/model-map.md`；涉及正式结果时再读 `08_results/results-index.md`。
+3. 运行：
+
+   ```text
+   git status --short
+   git status --ignored --short
+   git branch --show-current
+   ```
+
+4. 确认当前分支、机器标识、修改路径、已有未提交文件及是否与本次任务重叠。
+5. 检查未完成的 merge、rebase、cherry-pick 和未解决冲突。
+
+出现以下情况必须停止修改并报告：
+
+- 分支身份错误或处于 detached HEAD。
+- 存在未解决冲突或未完成的 Git 流程。
+- 本次修改会覆盖无法确认来源的未提交工作。
+- 用户要求与官方题目、原始数据不可变规则冲突。
+- 无法确认正式结果来源或冻结状态。
+
+禁止使用 `git reset --hard`、`git clean -fd`、`git checkout -- .`、`git restore .` 和自动 stash。不得覆盖、丢弃或暗中合并他人的未提交工作。
+
+## 4. 目录结构与用途
+
+| 目录 | 唯一用途 | 关键规则 |
+| --- | --- | --- |
+| `00_progress/` | 正式进度、五问模型总览、历史决策 | 管理内容使用中文；临时记录只进 `.working/` |
+| `01_problem/` | 官方题面、附件及其可读文本 | `source/` 只读；提取文本必须注明来源 |
+| `02_references/` | 文献 PDF、索引和引用信息 | 先读索引，必要时再读 PDF；禁止虚构文献 |
+| `03_data/` | 原始数据和处理数据 | `raw/` 只读；处理数据必须可由程序重建 |
+| `04_code/` | Python、R、TEX 工具程序 | 建模、验证、绘图分开；固定入口和随机种子 |
+| `05_figures/` | 工作阶段生成的图表 | 必须由 plotting 程序读取 CSV 生成 |
+| `06_drafts/` | 每问演示性 TEX/PDF 和说明笔记 | 供讨论参考，不等于冻结结论 |
+| `07_frozen/` | 经确认的代码、数据、图表和演示稿快照 | 只通过冻结流程写入；每问必须有清单 |
+| `08_results/` | 从冻结快照晋升的论文参考包 | 论文写作主要参考；禁止直接重算核心结果 |
+| `09_submission/` | 正式论文、附录、代码包、AI 使用报告 | 只存准备提交或已提交材料 |
+
+每个顶级目录和重要次级目录必须有 `README.md`，中文说明目录用途、文件索引、输入输出和验收方式。不存在的结果不得用占位数据伪造。
+
+## 5. 统一状态字段
+
+禁止用一个 `status` 混合表达不同含义。使用以下三类字段：
+
+### 工作进度 `progress`
+
+- `planned`
+- `in_progress`
+- `completed`
+- `blocked`
+
+### 技术阶段 `stage`
+
+- `v0`
+- `v1`
+- `draft`
+- `frozen`
+
+### 复核结论 `review`
+
+- `pending`
+- `pass`
+- `pass_with_limits`
+- `reject`
+
+需要描述文件层级时另用：
+
+- `working`
+- `frozen`
+- `result`
+- `submission`
+
+管理文件的表头和说明使用中文，以上字段值保持英文小写，便于机器检查。
+
+对 V1 复核包、冻结清单、结果晋升清单和正式数字登记，必须同时提供可机器读取的
+YAML 或 JSON 元数据，至少包含：`question`、`progress`、`stage`、`review`、
+`evidence_id`、`source_commit`、`updated_at`。Markdown 表格可用于说明，但不能成为
+这些字段的唯一载体。
+
+## 6. 进度记录
+
+- 正式进度写入 `00_progress/progress-log.md`，只能追加，不覆盖历史。
+- 时间戳格式为 `[YYYY-MM-DD HH:mm:ss CST]`。
+- 每条记录至少包含：时间、机器、问题、本次确认内容、工作进度、技术阶段、复核结论、本地提交和远端推送。
+- 同一明确任务中的尝试、撤回和未确认方案先写入 `00_progress/.working/progress-draft.md`。
+- `.working/` 是本地临时区，必须被 Git 忽略。
+- 任务结束时只把合并后的一条确定信息加入正式日志；删除临时记录不等于删除正式历史。
+- 本地 commit 与远端 push 必须分开记录。没有实际 push 时不得写“已上传”。
+
+涉及引用、冻结、结果晋升或提交前，必须读取相关索引中已登记的 P0/风险项；若该项
+会影响本次结论、引用或文件包，必须先关闭风险或明确阻断下游操作。不得因 P0 只出
+现在历史日志、文献索引或目录 README 中而忽略它。
+
+## 7. 题面与文献
+
+### 题面
+
+- `01_problem/source/` 中的官方 PDF 和附件不可改写、覆盖或重新编码。
+- `01_problem/extracted/` 可保存供 Agent 快速阅读的 Markdown 文本。
+- 提取文本必须记录源文件、SHA-256、提取方式和页码边界；图形、公式或表格无法可靠提取时必须提示回看原 PDF。
+- 题意判断以官方源文件为准，提取文本只用于定位。
+
+### 文献
+
+- 先读 `02_references/references-index.md`，只有任务需要时才打开具体 PDF。
+- 每篇文献至少登记：引用键、名称、作者、年份、文献类型/期刊、主要内容、可用参考部分、文件路径、DOI/URL、全文状态和阅读范围。
+- 正式引用使用 `02_references/references.bib` 中已核实条目。
+- 禁止把搜索摘要、文件名或 AI 记忆当作已核实文献内容。
+- 未读全文时明确标记；受限文献不得伪装为已下载 PDF。
+
+## 8. 数据规则
+
+### 原始数据
+
+- `03_data/raw/` 只读；不得修改单元格、工作表、文件名或格式。
+- 首次登记原始数据时记录大小和 SHA-256。
+- 外部新增数据必须记录来源、下载时间、许可证或使用条件。
+
+### 处理数据
+
+- 所有重要预处理、建模、验证和绘图输入必须保存为 CSV。
+- CSV 位于 `03_data/processed/q*/` 或 `03_data/processed/validation/q*/`。
+- 不得手工修改正式处理 CSV；必须修改生成程序后重新生成。
+- 每个处理文件必须在 `03_data/README.md` 或相应索引中登记：
+  - 来源文件；
+  - 生成程序和命令；
+  - 生成时间；
+  - 行数、列数和字段；
+  - 单位、场景和缺失值规则；
+  - 随机种子；
+  - SHA-256；
+  - 当前阶段和证据编号。
+- 训练、验证、测试切分必须可重建并防止数据泄漏。
+- 不把训练误差称为泛化误差；不把相关关系称为因果关系。
+
+### 可重复运行与证据更新
+
+- 受版本管理的证据文件应描述可复核的结论、输入哈希、命令和产物哈希；同一输入与
+  同一检查结论再次运行时，不得只因 `generated_at`、耗时或机器瞬态信息改写它。
+- 每次运行的时间戳、控制台输出和性能波动写入 `.working/` 或已忽略的运行日志；只有
+  输入、代码、检查项、结果或结论变化时才更新版本管理的证据文件。
+- 正式运行记录至少保存：入口命令、解释器/环境、输入哈希、随机种子、开始/结束时间、
+  退出码、输出路径、关键输出哈希和 Evidence ID。记录位置必须在对应 README 或索引中登记。
+
+## 9. 代码和环境
+
+- 项目基准环境：Python 3.14、MiKTeX 26.1；R 版本以实际验证后的 `environment.md` 为准。
+- 使用项目虚拟环境，不依赖系统默认 `python`。
+- 依赖写入 `requirements.txt`；测试和质量工具写入 `requirements-dev.txt`。
+- 新增第三方库前先检查现有依赖；新增后更新依赖文件并执行导入测试。
+- 程序按 `model/`、`validation/`、`plotting/` 分开。
+- 建议名称：
+
+  ```text
+  q3_prepare_data.py
+  q3_build_surrogate.py
+  q3_optimize_pareto.py
+  q3_validate_constraints.py
+  q3_plot_pareto.py
+  ```
+
+- `plotting/` 程序只能读取已经保存的 CSV/JSON 并生成图，不得重新拟合模型或暗中改变正式数字。
+- `model/` 与 `validation/` 程序只能写入 `03_data/processed/`、`05_figures/` 或
+  `00_progress/.working/`；不得创建、覆盖或修改 `06_drafts/`、`07_frozen/`、
+  `08_results/`、`09_submission/` 中的文件。草稿生成器必须与数值模型入口分离。
+- 每个随机算法必须记录 seed；正式随机结论应说明重复次数或收敛检查。
+- 正式运行保存命令、环境、输入、seed、耗时、退出码、输出路径和关键输出哈希。
+- 未实际执行的程序不得写“运行成功”。
+
+### 最小验证要求
+
+- 每次有效修改在提交前必须执行 `git diff --check`，并执行当前目录 README 声明的验证入口。
+- 修改 Python 时至少运行受影响文件的编译/导入检查；修改模型、验证或数据生成逻辑时还必须
+  运行对应的独立复现或不变量检查。若尚无自动化检查，必须在交接中明确说明缺口，不能写成
+  “已验证”。
+- 修改原始数据登记、输入接口或结果晋升时，必须重新核对原始文件 SHA-256、处理产物索引和
+  上下游接口；不适用的检查必须说明原因。
+
+## 10. 图表和演示稿
+
+- 工作图表放入 `05_figures/q*/`，不得放入代码目录。
+- 命名格式：`fig_q<问题>_<两位序号>_<主题>.<ext>`。
+- 同一正式图优先保留 PDF/SVG 矢量版和 PNG 预览版。
+- 图必须记录来源程序、输入 CSV、生成命令和拟支持的判断。
+- 坐标轴、单位、图例、颜色和论文引用必须明确；禁止手工修图后失去可追溯性。
+- 每问演示稿放入 `06_drafts/q*/`，名称使用 `q<问题>_demo.tex` 与同名 PDF。
+- TEX 是可编辑源，PDF 是预览；只编辑 TEX，修改后重新编译 PDF。
+- LaTeX 辅助文件进入构建目录并保持 Git 忽略，不得混入草稿、冻结或提交目录。
+
+## 11. V0、V1、Draft 与 P0
+
+V0 至少包含：问题目标、输入、输出、变量、单位、设计域、约束、假设、主模型、备用模型、代码入口、初步证据、风险和下游接口。
+
+V1 至少检查：数据完整性、单位、公式、索引、目标方向、约束、可复现性、基线、泄漏、误差、收敛、敏感性、外推和证据边界。
+
+只有 `review=pass` 或 `review=pass_with_limits` 的内容可进入正式 Draft；限制必须写在相关结果附近。
+
+以下为 P0，发现后必须停止下游写作、冻结或晋升：
+
+- 数据泄漏或测试集参与模型选择。
+- 非法解、约束违反、单位或目标方向错误。
+- 无法从登记入口独立复现。
+- 关键结果依赖未说明的人工步骤。
+- 未披露的显著外推。
+- 未收敛却声称最优。
+- 正式数字、图表和正文显著冲突。
+- 原始数据被修改。
+
+不得把代理模型最优称为真实全局最优，不得把情景结果称为事实，不得把数值模拟称为实际实验；“显著、因果、验证、鲁棒、稳定、全局最优”等强词必须有相应证据。
+
+## 12. 冻结、解冻和结果晋升
+
+### 冻结
+
+- 每问冻结到 `07_frozen/q*/`。
+- 必须同时保存必要的 `code/`、`data/`、`figures/`、`draft/` 和 `freeze-manifest.md`。
+- 冻结清单至少记录：
+  - 问题、修订号、时间、机器；
+  - 源 commit；
+  - `progress`、`stage`、`review`；
+  - 代码入口与运行命令；
+  - 输入输出接口、变量、单位、形状和合法域；
+  - 文件清单与 SHA-256；
+  - Evidence ID；
+  - 假设、限制、外推边界和遗留风险。
+- 冻结必须有当前用户明确确认或文件中已登记的确认依据；Agent 不得自行宣布冻结。
+
+### 解冻
+
+- 后续发现上游错误时，登记风险并标记受影响问题。
+- 不得在下游文件中顺手修正上游正式数字。
+- 必须解冻上游、重新运行 V1、更新 Draft、重新冻结，并对所有依赖问题做回归检查。
+- 旧冻结记录由 Git 保留，不覆盖或移动旧标签。
+
+### 晋升到结果
+
+- `08_results/` 只能从 `07_frozen/` 晋升。
+- 每问必须有 `source-manifest.md`，记录源冻结修订、源 commit、晋升时间、机器和文件哈希。
+- `08_results/` 是论文参考层，禁止直接重新计算或手改核心数字。
+- 需要修改时回到工作区和冻结流程，再重新晋升。
+
+## 13. Evidence 与正式数字
+
+- 每个核心判断使用 Evidence ID，例如 `E-Q3-001`。
+- Evidence 至少连接：结论、源 commit、运行命令、结果文件、图表/表格、复核结论和论文位置。
+- 每个正式数字至少记录：指标、值、单位、精度、场景、适用域、数据版本、脚本、Evidence ID 和批准状态。
+- `08_results/results-index.md` 是结果层的统一入口，不得从未冻结 CSV 挑选更好看的数字。
+- 没有证据闭环的句子应删除，或明确降级为假设、情景、讨论或证据缺口。
+
+## 14. 文件命名
+
+- 普通目录和文件使用小写英文、数字、`-`、`_`；内容和标题可以使用中文。
+- 官方源文件允许保留规范化后的题目标识名称。
+- 不使用 `final`、`new`、`latest`、`最新版`、`最终版2` 等文件名版本词。
+- 数据：`q3_pareto_candidates.csv`。
+- 图：`fig_q3_01_pareto_front.pdf`。
+- 表：`tab_q3_01_candidate_comparison.csv`。
+- 草稿：`q3_demo.tex`、`q3_demo.pdf`。
+- 版本由 Git commit、冻结修订号和标签管理。
+
+## 15. 本地提交与远端权限
+
+定义：
+
+- local write：编辑或移动工作区文件；
+- local staging：`git add`；
+- local commit：`git commit`；
+- remote push：`git push`。
+
+每个明确任务产生有效修改后：
+
+1. 运行任务相关验证和 `git diff --check`。
+2. 只暂存本次相关且非忽略的精确路径。
+3. 检查暂存文件名、统计和文本差异。
+4. 检查疑似密钥，只报告文件和模式，不打印密钥值。
+5. 创建一个聚焦的本地提交，标题格式：
+
+   ```text
+   [A][ARCH] migrate repository workflow
+   [A][CODE] implement Q3 optimizer
+   [A][DATA] register Q2 processed dataset
+   ```
+
+不得提交缓存、编辑器文件、LaTeX 辅助文件、无关文件、疑似秘密或未经确认的大文件。不得创建空提交。
+
+远端 push 默认禁止。只有当前请求明确授权 `git push`、上传或等价远端动作，并且目标明确时才可执行。以前的授权不延续。强推、远端删除、标签推送、Release、PR 和设置修改分别需要明确授权。
+
+## 16. 任务交接
+
+任务结束必须报告：
+
+- 修改和迁移的文件；
+- 未处理文件及原因；
+- 验证命令和结果；
+- 本地提交哈希；
+- 最终 `git status`；
+- 是否执行远端推送。
+
+没有远端授权时明确写：
+
+```text
+Remote push not executed: explicit remote permission was not granted.
+```

@@ -4,12 +4,13 @@
 /papers.zip
 /*.lnk
 
-# 本地运行输出与临时工作区（最终可复现图表应放入 projects/<项目>/08_figures/）
+# 本地运行输出与临时工作区（最终可复现图表应放入 05_figures/）
 /output/
 /outcome/
 /tmp/
 /scratch/
 /workspace/
+00_progress/.working/
 **/output/
 **/outputs/
 **/results/
@@ -68,6 +69,39 @@ env/
 *.pt
 *.pth
 *.onnx
+
+# LaTeX build directories and auxiliary files (formal TEX/PDF pairs are tracked)
+.latex-build/
+**/.latex-build/
+latex-build/
+**/latex-build/
+build/
+**/build/
+*.lof
+*.lot
+*.synctex
+*.xdv
+*.dvi
+*.ps
+*.run.xml
+*.idx
+*.ind
+*.ilg
+*.ist
+*.glo
+*.glg
+*.gls
+*.glsdefs
+*.acn
+*.acr
+*.alg
+*.vrb
+*.loa
+*.thm
+*.maf
+*.mtc
+*.mtc0
+*.mw
 
 # 操作系统与编辑器
 .DS_Store
