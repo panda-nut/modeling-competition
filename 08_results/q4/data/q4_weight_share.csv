@@ -1,0 +1,14 @@
+﻿N,winning_weight_count,weight_domain,winning_weight_share
+2.0,51,complete_simplex,0.038461538461538464
+4.0,740,complete_simplex,0.5580693815987934
+6.0,301,complete_simplex,0.22699849170437406
+8.0,35,complete_simplex,0.026395173453996983
+10.0,199,complete_simplex,0.15007541478129713
+4.0,390,balanced_w_ge_0p1,0.5855855855855856
+6.0,189,balanced_w_ge_0p1,0.28378378378378377
+8.0,17,balanced_w_ge_0p1,0.025525525525525526
+10.0,70,balanced_w_ge_0p1,0.10510510510510511
+4.0,35,thermal_priority_wR_ge_0p5,0.09971509971509972
+6.0,87,thermal_priority_wR_ge_0p5,0.24786324786324787
+8.0,31,thermal_priority_wR_ge_0p5,0.08831908831908832
+10.0,198,thermal_priority_wR_ge_0p5,0.5641025641025641

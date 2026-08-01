@@ -1,0 +1,132 @@
+{
+  "question": "q4",
+  "progress": "completed",
+  "stage": "result",
+  "review": "pass_with_limits",
+  "evidence_id": "E-Q4-FUSED-001",
+  "source_commit": "47f9947846c6a2e64c571c8a1fc1d675df7ae849",
+  "updated_at": "2026-08-01 11:23:20 CST",
+  "promotion_route": "direct_user_exception",
+  "files": [
+    {
+      "path": "code/q4_analyze_preference_sensitivity.py",
+      "size": 5770,
+      "sha256": "dd32551fac80e610d39f0a2207bd22e67d804260aa571cb7d4c359da7b8d6b07"
+    },
+    {
+      "path": "code/q4_analyze_regret.py",
+      "size": 14223,
+      "sha256": "2a6da9ab9812fec4ffd7dd748e9dde260ed8bf9f0cb06bdae7277ab900a032d7"
+    },
+    {
+      "path": "code/q4_optimize_preferences.py",
+      "size": 20162,
+      "sha256": "920cd911fa2db92b99abf02dcd2df925828f92e33deaeafbabb48912a20e6d7f"
+    },
+    {
+      "path": "code/q4_plot_results.py",
+      "size": 1203,
+      "sha256": "b0336b451ba3c429a3e69fd534514ecbd75720fef0832a3831f2874ac98f64b6"
+    },
+    {
+      "path": "data/q45_robustness_summary.json",
+      "size": 420,
+      "sha256": "a628c09b5dd4674ec6f747a345631b96787b7963318748ad7e768f5f7123a593"
+    },
+    {
+      "path": "data/q45_summary.json",
+      "size": 5331,
+      "sha256": "65086728a2919ecd9153b08d1e5e9ebc6924cf1b250a28b1bc9d5c8a639ea447"
+    },
+    {
+      "path": "data/q4_convergence.csv",
+      "size": 433,
+      "sha256": "72556b2b7b9e884008b0367c103009b58742464845f3de0d168e040e3a6c218b"
+    },
+    {
+      "path": "data/q4_convergence_corrected.csv",
+      "size": 331,
+      "sha256": "69b8d14f14d698553afb423b8ec620c0fa53a6f2af3abc0ef25b392e2fe51285"
+    },
+    {
+      "path": "data/q4_regret_comparison.csv",
+      "size": 1015,
+      "sha256": "3cc64e03921107fb309f7db6e7f685fc8918164d4531373eda3b08636f3ce96c"
+    },
+    {
+      "path": "data/q4_regret_definition_comparison.csv",
+      "size": 1306,
+      "sha256": "a1569e1bd99e02cdfffa3283cb6d1cc418323f1becff9b216c962edec216e89a"
+    },
+    {
+      "path": "data/q4_representative_scenarios.csv",
+      "size": 743,
+      "sha256": "182f8c4a194aac4c8ca05ebe2c1f28c5051e40a573e4fe0e42ee527ce7bd18aa"
+    },
+    {
+      "path": "data/q4_representative_scenarios_corrected.csv",
+      "size": 785,
+      "sha256": "30a78c4866bd0bddf9f5ac756429a1f330b1cb3cf137d8e23c6673299e0d05a8"
+    },
+    {
+      "path": "data/q4_weight_domain_comparison.csv",
+      "size": 717,
+      "sha256": "524c89813f544e98fa6bb41139b7e01f6d72718da6bc7312461cf8c5a07e5939"
+    },
+    {
+      "path": "data/q4_weight_mapping.csv",
+      "size": 231334,
+      "sha256": "8babcc8ddeee89e04454ebe6442ae9ba3bcba6562cb30340a3ec6e78469aa17d"
+    },
+    {
+      "path": "data/q4_weight_scan_H50.csv",
+      "size": 150789,
+      "sha256": "e18951d6e7ce04ce6f0138dcde4f269b5c07c725961657efc10e1b046ca79fee"
+    },
+    {
+      "path": "data/q4_weight_share.csv",
+      "size": 700,
+      "sha256": "6ba769864a8264215e4a24fd87019232053f196f9cbbca150012a31b4b8090a0"
+    },
+    {
+      "path": "data/q4_weight_share_complete_simplex.csv",
+      "size": 142,
+      "sha256": "cf3306ac86f0c632905b1236617f5c450a22ca2a515c553c6a622a9cd287ccce"
+    },
+    {
+      "path": "data/validation/q4_preference_sensitivity.csv",
+      "size": 349,
+      "sha256": "80553191146a6b0412ab220f4ac376f392450347ec6d6eb1c3eb6e4c2a61cc2b"
+    },
+    {
+      "path": "drafts/q4_demo.pdf",
+      "size": 106948,
+      "sha256": "e0a404945348d6698cb88979dfab6f94d82bca8bcd49b7bafa88378b3ba23133"
+    },
+    {
+      "path": "drafts/q4_demo.tex",
+      "size": 3369,
+      "sha256": "fcaa9682aeab5676915f2ac968e7506419c819214ae31edf94e39aee4fb41721"
+    },
+    {
+      "path": "figures/fig_q4_01_weight_mapping.pdf",
+      "size": 30119,
+      "sha256": "6b739b436cb18afe788426fc3e15795e27fc21f513fb93da41e66e893aae013e"
+    },
+    {
+      "path": "README.md",
+      "size": 434,
+      "sha256": "1a8c3e6b4ca3fb345bc27facb0671a6c3253ab71f1b78785dbe74764c4db50eb"
+    },
+    {
+      "path": "result-summary.md",
+      "size": 308,
+      "sha256": "11df2d6a14b46849f817f361050f04c1535eab90cbe941bb270f09a3f7bbf544"
+    },
+    {
+      "path": "source-manifest.md",
+      "size": 443,
+      "sha256": "292df600d7e9a16a9d3b02ff206e2f3672684d8ad0b8e6843964162592f71ecc"
+    }
+  ]
+}

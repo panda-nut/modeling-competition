@@ -1,0 +1,117 @@
+{
+  "question": "q1",
+  "progress": "completed",
+  "stage": "result",
+  "review": "pass_with_limits",
+  "evidence_id": "E-Q1-FUSED-001",
+  "source_commit": "47f9947846c6a2e64c571c8a1fc1d675df7ae849",
+  "updated_at": "2026-08-01 11:23:20 CST",
+  "promotion_route": "direct_user_exception",
+  "files": [
+    {
+      "path": "code/q1_effect_analysis.py",
+      "size": 6707,
+      "sha256": "5decac6dafa89feae35378a274e1e3358f2af1685f5196c03af16bec028d0271"
+    },
+    {
+      "path": "code/q1_plot_results.py",
+      "size": 5609,
+      "sha256": "3c986b5bbe5b2f1c6c9c20261f975b21ebd5840ed518e716bccb047eaffda22b"
+    },
+    {
+      "path": "code/q1_prepare_data.py",
+      "size": 739,
+      "sha256": "f570f730f0822738d165cab3cf37fbe878909fb34d9ee5b167e2c5696f4d7512"
+    },
+    {
+      "path": "data/q1_anova_contributions.csv",
+      "size": 1061,
+      "sha256": "472871d0dff0da24584fd8ef4abf20b5b8166265652cdd72a7c4917d51fc69f7"
+    },
+    {
+      "path": "data/q1_effect_contributions.csv",
+      "size": 2121,
+      "sha256": "0146e2571acc3c64a77ab94e89299767b44c248f18a0721ced9cce4a5a0bc1bc"
+    },
+    {
+      "path": "data/q1_interaction_effects.csv",
+      "size": 9066,
+      "sha256": "85e4f481dcd02069d40c0f70d36ead53d8abf63829b362aae36a3e50378059cd"
+    },
+    {
+      "path": "data/q1_main_effects.csv",
+      "size": 2576,
+      "sha256": "bbefaf5f559ff89f46a89a9697ce10879d9c3c4aa1340309246a5fc06b953026"
+    },
+    {
+      "path": "data/q1_response_data.csv",
+      "size": 3467,
+      "sha256": "e8e93605d705644ca690df43577bf2fee1877576d3ef8834520b0317f91d77d9"
+    },
+    {
+      "path": "drafts/q1_demo.pdf",
+      "size": 210815,
+      "sha256": "c40e36b6fc2f74827997021f50f6c59f4d63a601c1eac32b1fd2da1210920bb3"
+    },
+    {
+      "path": "drafts/q1_demo.tex",
+      "size": 19455,
+      "sha256": "96f2eff8d1bf03812d1b710c5772bf57697b9de3f303feeb08199b3f75fecf2c"
+    },
+    {
+      "path": "figures/fig_q1_01_main_effects.pdf",
+      "size": 26407,
+      "sha256": "d4b6f5327d5df4f6de6ad61012995dc1eb3a678939c95cdc7bd6d97315599a79"
+    },
+    {
+      "path": "figures/fig_q1_01_main_effects.png",
+      "size": 213359,
+      "sha256": "c73ab09823dff0dedddbf9d1bbec0d2f1889567dbd7e833671f349a92b23fe47"
+    },
+    {
+      "path": "figures/fig_q1_02_performance_tradeoff.pdf",
+      "size": 27503,
+      "sha256": "f5f79aabcc4300566ac91c27d70d7948b69e72a4f07e9d8c3521a2b0dc7b8a2c"
+    },
+    {
+      "path": "figures/fig_q1_02_performance_tradeoff.png",
+      "size": 244541,
+      "sha256": "4e9481bce10c12f628025f41b63f386738357e6d03e5f3ca3826a34f306f334f"
+    },
+    {
+      "path": "figures/fig_q1_03_effect_contributions.pdf",
+      "size": 24311,
+      "sha256": "d992c6350cf8cc8b92893251adeacbbcd48af262aea902a08c1e71e13bff2655"
+    },
+    {
+      "path": "figures/fig_q1_03_effect_contributions.png",
+      "size": 63710,
+      "sha256": "b346cb3b525a89686964fc498c2fb002e70ad7c305490cb7551686f7a25e34f4"
+    },
+    {
+      "path": "figures/fig_q1_04_interaction_effects.pdf",
+      "size": 28875,
+      "sha256": "f236df558670248a0e95c69a568c48a26e5cd90eb42bfd56dfa111b740c62546"
+    },
+    {
+      "path": "figures/fig_q1_04_interaction_effects.png",
+      "size": 353109,
+      "sha256": "8be882979e3960dba99ce6f35a298b4eeee02353b13c938d90331aff67927e13"
+    },
+    {
+      "path": "README.md",
+      "size": 419,
+      "sha256": "9394b1cdc7c893f33e0933ed78912c3e0283fea5d2c7b587e84803b94aa331cc"
+    },
+    {
+      "path": "result-summary.md",
+      "size": 509,
+      "sha256": "aae962fd477a1dbeacbcfe6c9bef58b4ef8c30eb8e9875993d87dfdd6b8253c6"
+    },
+    {
+      "path": "source-manifest.md",
+      "size": 497,
+      "sha256": "dfb3e2dc87b4309e732eabdeb15099782493d70ab4121b73261545aef8449c82"
+    }
+  ]
+}

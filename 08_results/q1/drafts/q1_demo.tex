@@ -1,0 +1,242 @@
+﻿% !TEX program = xelatex
+\documentclass[UTF8,12pt,a4paper]{ctexart}
+\usepackage[a4paper,top=2.25cm,bottom=2.2cm,left=2.3cm,right=2.3cm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,bm,booktabs,tabularx,array,graphicx,float}
+\usepackage{xcolor,tikz,enumitem,fancyhdr,hyperref,setspace,titlesec}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\definecolor{navy}{HTML}{17324D}\definecolor{blue}{HTML}{2F6690}
+\definecolor{teal}{HTML}{2A9D8F}\definecolor{orange}{HTML}{E76F51}
+\definecolor{lightblue}{HTML}{EAF3F8}\definecolor{lightgold}{HTML}{FFF5DC}
+\hypersetup{colorlinks=true,linkcolor=navy,citecolor=blue,urlcolor=blue,
+ pdftitle={B题第一问建模解答}}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{APMCM B题\quad 第一问建模正文}\fancyhead[R]{高性能芯片热管理系统}
+\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0.4pt}
+\titleformat{\section}{\Large\bfseries\color{navy}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{blue}}{\thesubsection}{0.6em}{}
+\setlist[itemize]{leftmargin=2em,itemsep=0.18em,topsep=0.22em}
+\setlist[enumerate]{leftmargin=2.25em,itemsep=0.2em,topsep=0.22em}
+\renewcommand{\arraystretch}{1.17}\setstretch{1.1}
+\newcommand{\Rth}{R_{\mathrm{th}}}\newcommand{\dP}{\Delta p}
+\newcommand{\mdot}{\dot m}\newcommand{\Vdot}{\dot V}
+\begin{document}
+
+\section{问题分析与建模思路}
+题目给出针肋宽度比$a$、歧管深高比$b$和针肋排数$N$，以及不同参数组合下的无量纲热阻、压降和温度非均匀性。第一问的目标不是求得某一组综合最优结构，而是建立结构参数影响三项性能的\textbf{机理关系}，并用附件数据检验其趋势是否一致。
+
+图\ref{fig:structure}标出三个设计变量对应的几何位置；图\ref{fig:path}给出本文采用的作用路径。建模的逻辑是：结构变化首先改变有效过流面积、湿润换热面积、局部速度和支路供液差异，继而改变热阻$R$、压降$P$与温度非均匀性$U$。这里$R,P,U$均直接指附件给出的三项无量纲响应，不反推其具体归一化方式。
+
+\begin{figure}[H]\centering
+\resizebox{\textwidth}{!}{\begin{tikzpicture}[font=\small,>=Stealth,
+ layer/.style={draw=navy,fill=lightblue,minimum width=6.4cm,minimum height=0.54cm,align=center},
+ flow/.style={draw=teal,very thick,->}, dim/.style={draw=black!75,thick,<->}, ext/.style={draw=black!55,thin}]
+% (a) Side view: hierarchy, flow path, and heights only.
+\begin{scope}[xshift=0cm]
+\node[layer,fill=orange!14] (chip) at (0,2.55) {芯片热源\quad $6\,\mathrm{mm}\times6\,\mathrm{mm}\times200\,\mu\mathrm m$};
+\node[layer] (sub) at (0,1.93) {氮化铝衬底};
+\node[layer,fill=teal!12,minimum height=0.82cm] (man) at (0,1.10) {歧管分配层};
+\node[layer,fill=lightgold,minimum height=0.86cm] (micro) at (0,0.05) {针肋微通道层};
+\node[anchor=east] at (-3.55,3.17) {多入口};
+\draw[flow] (-3.32,3.05)--(-3.32,1.48);
+\node[anchor=east] at (-3.55,1.05) {向下分配};
+\draw[flow] (-3.32,1.46)--(-3.32,0.45);
+\draw[flow] (-2.4,-0.13)--(2.5,-0.13) node[pos=1,below]{出口};
+\draw[ext] (3.25,1.51)--(3.70,1.51); \draw[ext] (3.25,0.69)--(3.70,0.69);
+\draw[dim] (3.58,1.51)--(3.58,0.69) node[midway,right]{$H_m$};
+\draw[ext] (3.25,0.48)--(4.10,0.48); \draw[ext] (3.25,-0.38)--(4.10,-0.38);
+\draw[dim] (3.98,0.48)--(3.98,-0.38) node[midway,right]{$H_c$};
+\node[font=\bfseries] at (0,-0.95) {(a) 系统侧视图};
+\end{scope}
+% (b) Top view: pin diameter, channel width, and streamwise rows.
+\begin{scope}[xshift=8.4cm]
+\draw[draw=navy,fill=lightgold] (-2.9,2.45) rectangle (2.9,-0.25);
+\draw[flow] (-2.5,3.28)--(2.5,3.28) node[midway,above]{流动方向};
+\foreach \x in {-1.8,-0.6,0.6,1.8}{\foreach \y in {0.25,1.10,1.95}{\draw[fill=orange!25,draw=orange!80!black] (\x,\y) circle (0.20);}}
+\draw[ext] (-2.00,0.25)--(-2.00,-0.02); \draw[ext] (-1.60,0.25)--(-1.60,-0.02);
+\draw[dim] (-2.00,-0.02)--(-1.60,-0.02) node[midway,below]{$d_p$};
+\draw[dim] (-3.20,-0.25)--(-3.20,2.45) node[midway,left]{$w_c$};
+\draw[dim] (-1.8,2.94)--(1.8,2.94) node[midway,below]{$N$ 排（沿流向）};
+\node[align=left,anchor=west] at (3.25,1.22) {$\displaystyle a=\frac{d_p}{w_c}$\\[0.15em]
+$\displaystyle b=\frac{H_m}{H_c}$\\[0.15em]
+$\displaystyle N=\text{单元内沿流向针肋排数}$};
+\node[font=\bfseries] at (0,-0.92) {(b) 针肋微通道局部俯视图};
+\end{scope}
+\end{tikzpicture}}
+\caption{芯片歧管式微通道热管理系统结构及设计变量示意图。（a）系统层级结构与冷却液流动路径；（b）针肋微通道局部结构及参数定义。}\label{fig:structure}
+\end{figure}
+
+\begin{figure}[H]\centering
+\resizebox{0.98\textwidth}{!}{\begin{tikzpicture}[>=Stealth,font=\small,
+ par/.style={rounded corners,draw=navy,very thick,fill=lightblue,minimum width=29mm,minimum height=13mm,align=center},
+ mech/.style={rounded corners,draw=teal,very thick,fill=teal!9,minimum width=37mm,minimum height=13mm,align=center},
+ result/.style={rounded corners,draw=orange,very thick,fill=lightgold,minimum width=31mm,minimum height=13mm,align=center},
+ arr/.style={->,thick,draw=black!70}]
+\node[par](a){针肋宽度比\\$a$}; \node[par,below=5mm of a](b){歧管深高比\\$b$}; \node[par,below=5mm of b](n){针肋排数\\$N$};
+\node[mech,right=17mm of a](area){湿润面积 $A_{wet}$\\有效过流面积 $A_f$};
+\node[mech,right=17mm of b](vel){局部/歧管速度\\流量分配};
+\node[mech,right=17mm of n](h){局部换热能力\\沿程升温};
+\node[result,right=17mm of area](r){热阻 $R$\\散热能力};
+\node[result,right=17mm of vel](p){压降 $P$\\运行代价};
+\node[result,right=17mm of h](u){非均匀性 $U$\\热点可靠性};
+\draw[arr] (a.east)--(area.west); \draw[arr] (a.east)--(vel.west); \draw[arr] (a.east)--(h.west);
+\draw[arr] (b.east)--(vel.west); \draw[arr] (b.east)--(h.west);
+\draw[arr] (n.east)--(area.west); \draw[arr] (n.east)--(vel.west); \draw[arr] (n.east)--(h.west);
+\draw[arr](area)--(r);\draw[arr](vel)--(p);\draw[arr](h)--(u);
+\draw[arr,dashed](vel.east) to[bend right=14](r.west);\draw[arr,dashed](vel.east) to[bend left=14](u.west);
+\end{tikzpicture}}
+\caption{结构参数影响热阻、压降和温度非均匀性的机理路径；虚线表示通过流量分配产生的间接影响。}\label{fig:path}
+\end{figure}
+
+\subsection{模型假设和基础工况}
+\begin{enumerate}
+\item 系统处于稳态，冷却液为单相不可压水，物性取题目附件给定值。
+\item 芯片热源均匀，芯片、衬底和冷却液之间的传热过程在比较不同结构时保持相同边界条件。\par
+各方案均采用附件给定的外界温度$293\,\mathrm K$和外侧自然对流换热系数$10\,\mathrm{W/(m^2K)}$；该边界条件的影响并入共同背景热阻，不改变结构参数相对作用方向的判断。
+\item 不同结构的入口总质量流量相同；压降差异主要反映结构引起的水力阻力变化。
+\item 支路流量允许不均匀分配；该不均匀性是温度非均匀性的重要潜在来源。
+\item 附件未公开三项无量纲指标的归一化定义，故本文仅讨论其相对变化、边际均值和极值位置。
+\end{enumerate}
+芯片热源体积为$6\,\mathrm{mm}\times6\,\mathrm{mm}\times200\,\mu\mathrm m$。为确定各方案共用的热输入与冷却液整体温升尺度，计算
+\begin{equation}
+Q=q'''V_c=36.0\ \mathrm W,\qquad
+\Delta T_b=\frac{Q}{\mdot c_p}=8.61\ \mathrm K.
+\label{eq:base}
+\end{equation}
+$\Delta T_b$是冷却液吸收全部热量时的理想混合温升，用于确定温度变化量级；它不是芯片最高温升的计算值。
+
+\section{结构参数--性能指标机理模型}
+有针肋样本的设计域为
+\[
+\begin{gathered}
+a\in\{0.10,0.15,0.20,0.30\},\qquad b\in\{3.0,3.5,4.0,4.5\},\\
+N\in\{2,4,6,8,10\}.
+\end{gathered}
+\]
+无针肋基线为$(a,N)=(0,0)$且$b$取上述四个水平。为区分物理层量与附件数据层响应，记
+\begin{align}
+d_p&=aw_c,\qquad H_m=bH_c,\notag\\
+R&=\Phi_R(\Rth),\qquad P=\Phi_P(\dP),\qquad U=\Phi_U(\mathcal U),\notag\\
+&\Phi_R'(\Rth)>0,\qquad \Phi_P'(\dP)>0,\qquad \Phi_U'(\mathcal U)>0.
+\label{eq:geometry}
+\end{align}
+其中$\Rth,\dP,\mathcal U$分别表示物理层热阻、压降和温度非均匀程度，$R,P,U$为附件给出的无量纲响应。根据三项指标均保持“越小越优”的评价方向，假设附件采用的无量纲化映射为正单调映射。由于具体映射形式未知，本文仅比较同一指标内的变化方向、边际均值和极值位置。
+
+为描述$a$与$N$对最小有效过流截面、间隙速度和针肋换热面积的影响，有
+\begin{align}
+A_f(a)&=A_{f,0}-A_{block}(a),\qquad u_g(a)=\frac{\Vdot_{cell}}{A_f(a)},\notag\\
+A_{\mathrm{pin,add}}(a,N)&\propto N\pi d_pH_c=N\pi aw_cH_c,\notag\\
+A_{wet}(a,N)&=A_{wet,0}+A_{\mathrm{pin,add}}(a,N).
+\label{eq:area_velocity}
+\end{align}
+其中$A_{\mathrm{pin,add}}$表示扣除针肋占据原壁面后形成的净新增湿润面积。由于附件未给出每排针肋数量及完整连接细节，本文仅保留其与$a,N$的比例关系。由式\eqref{eq:area_velocity}有$\partial A_f/\partial a<0$、$\partial u_g/\partial a>0$，且$\partial A_{wet}/\partial a>0$、$\partial A_{wet}/\partial N>0$。因此$a$带来扩面与阻塞的竞争，$N$主要增加针肋总面积和作用次数，而不直接改变单排最小过流截面。
+
+对从入口经过歧管分配层、微通道针肋区并到达出口的一条代表性主流路径，系统压降可近似分解为歧管损失和微通道--针肋区损失。为解释附件压降$P$的变化趋势，写为
+\begin{align}
+A_m(b)&=W_mH_m=W_mbH_c,\qquad u_m(b)=\frac{\Vdot_m}{A_m(b)},\qquad D_{h,m}(b)=\frac{4A_m(b)}{P_m(b)},\notag\\
+\Delta p_{\mathrm{eq}}&\approx\dP_m(b)+\dP_c(a,N),\notag\\
+\dP_m(b)&=\left[f_m\frac{L_m}{D_{h,m}(b)}+K_m\right]\frac{\rho u_m^2(b)}{2},\notag\\
+\dP_c(a,N)&=\left[f_c\frac{L_c}{D_{h,c}}+K_{turn}+K_{array}(a,N)\right]\frac{\rho u_g^2(a)}{2},\qquad
+K_{array}(a,N)\approx NK_{pin}(a).
+\label{eq:pressure}
+\end{align}
+后文为简洁仍将$\Delta p_{\mathrm{eq}}$记作$\dP$。其中$P_m$为歧管湿周，$K_m,K_{turn},K_{pin}$为局部损失系数。忽略相邻针肋排尾迹相互作用时，取$K_{array}(a,N)\approx NK_{pin}(a)$作为一阶近似；实际非线性和交互效应由第二问代理模型从附件数据中学习。故$b\uparrow\Rightarrow A_m\uparrow,u_m\downarrow,\Delta p_m\downarrow$；$a\uparrow\Rightarrow A_f\downarrow,u_g\uparrow$；$N\uparrow\Rightarrow K_{array}\uparrow$。针肋宽度比$a$决定单排针肋的阻塞程度和局部损失强度，排数$N$决定针肋作用次数，因此二者通过$A_{wet}(a,N)$和$K_{array}(a,N)$对换热与压降产生耦合影响；其具体交互形式在第二问中进一步识别。
+
+以特征温升定义物理热阻，并用湿润面积与有效换热能力解释附件热阻$R$的变化：
+\begin{equation}
+\Rth=\frac{T_\ast-T_{in}}{Q},\qquad T_\ast=T_{\max},\qquad
+\Rth\approx R_{solid}+\frac{1}{h_{eff}(a,b,N)A_{wet}(a,N)}.
+\label{eq:thermal}
+\end{equation}
+在各方案芯片与主要固体导热路径不变时，$R_{solid}$近似为常量；$b$主要通过流量分配与$h_{eff}$影响热阻。该式为解释关系，不代表附件热阻的精确定义。式中摩擦因子、局部损失系数及有效换热系数用于描述结构参数的物理作用方向。由于附件未提供完整局部几何和流场信息，第一问不对这些系数单独标定；结构参数到三项无量纲响应的定量映射由第二问代理模型根据样本数据建立。
+
+为说明流量偏配的来源，采用最简支路水力平衡
+\begin{equation}
+\Delta p_j=\mathcal R_j(a,N)\dot V_j+\frac12\rho K_j(a,N)u_j^2,
+\qquad \sum_{j=1}^{J}\dot V_j=\dot V.
+\label{eq:branch_balance}
+\end{equation}
+歧管深高比$b$通过改变歧管压力分布影响各支路驱动压差，而$a,N$通过改变支路阻力影响$\dot V_j$。因此，三个结构参数均可能引起支路供液差异，并进一步影响局部温升和温度非均匀性。该关系仅用于解释流量偏配的来源，不在第一问中数值求解各支路流量。
+
+在此基础上，用局部能量平衡解释不同支路的温升差异，并将其归结为温度非均匀性的物理来源：
+\begin{align}
+\Delta T_{b,j}&=\frac{Q_{up,j}}{\dot m_jc_p},\notag\\
+T_j-T_{in}&\approx q_jR_{loc,j}+\Delta T_{b,j},\notag\\
+\mathcal U&=F\!\left(CV_{\dot m},CV_{R_{loc}},CV_{\Delta T_b}\right),\qquad
+CV_X=\frac{\sigma_X}{\overline X}.
+\label{eq:uniformity}
+\end{align}
+其中$\Delta T_{b,j}$为第$j$条支路到达局部区域前的冷却液温升，$CV_{\Delta T_b}$表示各支路温升的离散程度，而非式\eqref{eq:base}中整体理想混合温升的变异。$q_j,R_{loc,j},Q_{up,j},\dot m_j$依次为局部热负荷、局部等效热阻、上游已吸热量和支路流量。在平均热负荷和总流量相近时，支路流量、局部热阻或支路温升的离散程度增大，通常会使温度非均匀性增加。该式不对附件$U$作具体数学定义，只给出其可能的物理来源。
+
+无针肋结构是上述机理模型的离散退化情形，故图\ref{fig:tradeoff}中的四个星形基线点满足
+\begin{equation}
+(a,N)=(0,0)\ \Longrightarrow\ d_p=A_{\mathrm{pin,add}}=A_{block}=K_{array}=0,\qquad
+A_f=A_{f,0},\quad A_{wet}=A_{wet,0}.
+\label{eq:baseline}
+\end{equation}
+
+\section{附件数据的趋势验证}
+附件含4组无针肋基线与80组有针肋全因子样本。第一问只用有针肋样本的主效应检验“机理预测--数据表现”是否一致。为使图\ref{fig:main}的边际均值和相对偏差可复现，定义
+\begin{align}
+\overline y_{k,l}&=\frac{1}{n_{k,l}}\sum_{i:x_{ik}=l}y_i,\qquad
+\overline y=\frac1{80}\sum_{i=1}^{80}y_i,\notag\\
+\delta_{k,l}&=\frac{\overline y_{k,l}-\overline y}{\overline y}\times100\%,\qquad y\in\{R,P,U\}.
+\label{eq:main_effect}
+\end{align}
+其中$x_{ik}$为第$i$个样本的因子$k$水平，$n_{k,l}$为该水平对应的样本数。
+图\ref{fig:main}中零线表示该水平的边际均值等于所有有针肋样本的总体均值；三项指标均以“越小越好”为方向比较。它反映其他参数水平取平均后的表现，\textbf{不代表三变量联合优化结果}。
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{../figures/fig_q1_01_main_effects.pdf}
+\caption{三个结构参数对系统性能指标的主效应。三项指标均越小越优；边际均值表示其他参数取各水平时的平均表现。}\label{fig:main}
+\end{figure}
+
+\begin{table}[H]\centering\small
+\caption{机理预测与附件主效应的趋势对照}\label{tab:trend}
+\begin{tabularx}{\textwidth}{p{2.55cm}p{4.25cm}X}\toprule
+机理预测&数据表现&判断\\\midrule
+$a$增大同时带来扩面与阻塞&其他参数水平取平均时，$a=0.2$对应$R$和$U$的边际均值最低；$a=0.3$时$P$相对$a=0.1$增加37.3\%&与“强化收益和阻力代价竞争”的预测一致\\
+$b$增大降低歧管流速&$b:3\to4.5$时$P$下降32.2\%，而$R$上升约1.94\%；$U$在$b=3.5$时边际均值最低&压降趋势一致；热阻与均匀性变化可能与局部流速和供液分配变化有关\\
+$N$增大带来扩面与局部阻力累积&$N:2\to10$时$R$下降2.18\%、$P$上升30.9\%；在考察的排数中，$N=4$时$U$的边际均值最低&与“换热强化和阻力累积并存”的预测一致；后段$U$升高可能与尾迹干扰和支路流量重新分配有关\\\bottomrule
+\end{tabularx}
+\end{table}
+
+无针肋的4组样本不单独与全部有针肋样本求平均比较，而在图\ref{fig:tradeoff}中作为模型退化基线以星形标出。横轴为附件压降$P$，纵轴为附件热阻$R$，颜色表示附件温度非均匀性$U$。图中同一$R$或$P$附近仍可出现不同颜色，说明第三项指标不能由前两项替代；同时，基线点位于样本云中不同位置，适合作为针肋机制的退化检验，而不用于宣称平均提升百分比。
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.68\textwidth]{../figures/fig_q1_02_performance_tradeoff.pdf}
+\caption{热阻、压降与温度非均匀性之间的性能权衡。圆点为有针肋样本，星形为相同歧管深高比下的无针肋基线。}\label{fig:tradeoff}
+\end{figure}
+
+\section{三项指标的评价合理性}
+在固定体积流量条件下，泵功与物理压降满足
+\begin{equation}
+W_{pump}=\frac{\dP\,\Vdot}{\eta_p},\qquad \Vdot=\text{常数}\ \Longrightarrow\ W_{pump}\propto\dP.
+\label{eq:pump}
+\end{equation}
+热阻$R$、压降$P$和温度非均匀性$U$分别对应\textbf{散热能力--运行代价--热点可靠性}。$R$衡量芯片整体散热能力和结温水平；$U$表征温度分布的离散程度，反映局部热点与热可靠性风险\cite{wang2024review,hir2021}。式\eqref{eq:pump}表明$P$反映固定流量下维持供液所需的泵功。针肋强化换热通常伴随额外局部阻力，因此低热阻并不必然对应低压降\cite{zhang2025pin,li2022double}；热阻和压降接近的两个结构仍可能具有不同的$U$，故三项指标在后续优化中均应独立保留。
+
+\section{第一问结论}
+\begin{enumerate}
+\item 建立了$(a,b,N)\to(A_f,A_{wet},U_g,\text{流量分配})\to(R,P,U)$的机理模型；其核心是几何变化、阻力变化、换热面积和供液差异之间的因果关系。
+\item 在其他参数水平取平均时，$a=0.2$对应热阻和温度非均匀性的边际均值最低；继续增大至$a=0.3$时压降明显升高。
+\item 随$b$由3增至4.5，压降显著降低；热阻略有增加，温度非均匀性在$b=3.5$时的边际均值最低。
+\item 随$N$由2增至10，热阻边际均值下降而压降上升；在所考察的排数水平中，$N=4$时温度非均匀性的边际均值最低。
+\item 上述结论均为附件数据的边际规律，不构成三变量联合意义下的“综合最优”结论；交互作用、代理模型和多目标优化留待后续问题处理。
+\end{enumerate}
+
+\begin{thebibliography}{99}
+\bibitem{wang2024review}
+WANG Q, TAO J, CUI Z, et al. Passive enhanced heat transfer, hotspot management and temperature uniformity enhancement of electronic devices by micro heat sinks: A review[J]. International Journal of Heat and Fluid Flow, 2024, 107: 109368. \href{https://doi.org/10.1016/j.ijheatfluidflow.2024.109368}{doi:10.1016/j.ijheatfluidflow.2024.109368}.
+
+\bibitem{hir2021}
+IEEE ELECTRONICS PACKAGING SOCIETY. Heterogeneous Integration Roadmap 2021: Chapter 20 Thermal[R]. Piscataway: IEEE EPS, 2022. \url{https://eps.ieee.org/technology/heterogeneous-integration-roadmap/}.
+
+\bibitem{zhang2025pin}
+ZHANG X, DONG W, LIU J, et al. The influence of pin fin structure on the flow and heat transfer characteristics of the manifold microchannel heat sink[J]. Applied Thermal Engineering, 2025, 261: 125119. \href{https://doi.org/10.1016/j.applthermaleng.2024.125119}{doi:10.1016/j.applthermaleng.2024.125119}.
+
+\bibitem{li2022double}
+LI Y, WANG Q, LI M, et al. Investigation of flow and heat transfer performance of double-layer pin-fin manifold microchannel heat sinks[J]. Water, 2022, 14(19): 3140. \href{https://doi.org/10.3390/w14193140}{doi:10.3390/w14193140}.
+\end{thebibliography}
+\end{document}
+
+

@@ -1,0 +1,77 @@
+{
+  "question": "q2",
+  "progress": "completed",
+  "stage": "result",
+  "review": "pass_with_limits",
+  "evidence_id": "E-Q2-FUSED-001",
+  "source_commit": "47f9947846c6a2e64c571c8a1fc1d675df7ae849",
+  "updated_at": "2026-08-01 11:23:20 CST",
+  "promotion_route": "direct_user_exception",
+  "files": [
+    {
+      "path": "code/q2_build_and_validate_surrogate.py",
+      "size": 6857,
+      "sha256": "b20dc94fdde400f9b59e3776958ac9b65652ff6445545af0fc5ef94389c92412"
+    },
+    {
+      "path": "code/q2_validate_surrogate.py",
+      "size": 13400,
+      "sha256": "1b4dc210fac4163cbf3efafe1f3c3fe2a851bab50406de76b5bf017be9c3ee44"
+    },
+    {
+      "path": "data/q2_alpha_stability.csv",
+      "size": 841,
+      "sha256": "c15ce762d624780dd60ed3775776e72b21e2df25ed57cb194f6c933df1d4ebdb"
+    },
+    {
+      "path": "data/q2_baseline_interpolation_comparison.csv",
+      "size": 293139,
+      "sha256": "d92b2233c737afbfc1a59b15fee6d9543164000ec7e6f3d2c7eb7058d2ad3fdb"
+    },
+    {
+      "path": "data/q2_nested_cv_folds.csv",
+      "size": 37324,
+      "sha256": "49018fa2d9b65b945f4d24e6707f10387c4ea5107b8dc6bc2ea69101bcc28170"
+    },
+    {
+      "path": "data/q2_nested_model_comparison.csv",
+      "size": 1076,
+      "sha256": "8bb6d03595129ef7838226cf626ef2659af81e8e2e582495d9e6af421f18a48e"
+    },
+    {
+      "path": "data/validation/q2_encoding_cv.csv",
+      "size": 341,
+      "sha256": "7c216356bd90d10b78572ac171d115143c927d6a1b8ba3111181795e443438e1"
+    },
+    {
+      "path": "data/validation/q2_structured_holdout.csv",
+      "size": 184,
+      "sha256": "5053769ba25694fdccd4a1f532d3cc73b000e541199346945e2d04da9135989c"
+    },
+    {
+      "path": "drafts/q2_demo.pdf",
+      "size": 208134,
+      "sha256": "9b6941ec55fdd8784749d395d3e1ace4e428fa476c05514a011285b199304a47"
+    },
+    {
+      "path": "drafts/q2_demo.tex",
+      "size": 53991,
+      "sha256": "b2095e27d34426c8340331c7a60721167a5a9d82707d761475a4fbc0a342b938"
+    },
+    {
+      "path": "README.md",
+      "size": 449,
+      "sha256": "a79888538d8970fe7ef33fdac283b0c5e1961eacd22d305d4286a3dc511b6445"
+    },
+    {
+      "path": "result-summary.md",
+      "size": 392,
+      "sha256": "3ebb29517c07c27a61e83957e27c89e83ce4e55fa20359048d06c0d1f1c4e614"
+    },
+    {
+      "path": "source-manifest.md",
+      "size": 452,
+      "sha256": "bc33cb79e0f666704313f62d25c34ea590b99467bf82d9eac73c5a69c9ef40a6"
+    }
+  ]
+}

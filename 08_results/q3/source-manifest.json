@@ -1,0 +1,167 @@
+{
+  "question": "q3",
+  "progress": "completed",
+  "stage": "result",
+  "review": "pass_with_limits",
+  "evidence_id": "E-Q3-FUSED-001",
+  "source_commit": "47f9947846c6a2e64c571c8a1fc1d675df7ae849",
+  "updated_at": "2026-08-01 11:23:20 CST",
+  "promotion_route": "direct_user_exception",
+  "files": [
+    {
+      "path": "code/q3_analyze_decision_sensitivity.py",
+      "size": 11361,
+      "sha256": "ec436967f9ab0795cb02ea72a23294ecf507ce86d97e1901dea53f747363058d"
+    },
+    {
+      "path": "code/q3_compare_algorithms.py",
+      "size": 7426,
+      "sha256": "dde2e1428d6d2d0074b841025555d56ef94f274f42aceec7529b14642fe60d44"
+    },
+    {
+      "path": "code/q3_optimize_pareto.py",
+      "size": 13121,
+      "sha256": "21ae45d4622b91e8da343916fce1ec0b198c006fa1a54541e40f827280da9796"
+    },
+    {
+      "path": "code/q3_plot_results.py",
+      "size": 4023,
+      "sha256": "bc7f103b766240ae1b4423bc3c3c518a7e0cecdae66207975bae2e0dc236a1ee"
+    },
+    {
+      "path": "code/q3_refine_pareto.py",
+      "size": 11877,
+      "sha256": "1e9190b829c02ede4dc984cef3f1f46cdbe0c6e0bc26632bff897e0a0a416256"
+    },
+    {
+      "path": "data/q3_adaptive_pareto.csv",
+      "size": 32889,
+      "sha256": "58ffc9f0ed6d4df425d7a1aee81612180bcb76b195b71c15a6dad8fa0a32818f"
+    },
+    {
+      "path": "data/q3_algorithm_metrics.csv",
+      "size": 2649,
+      "sha256": "56da37305054c2d4f262d1a737e2e53b62fcee7a64d61cee5e5b6d7e6c7f0f80"
+    },
+    {
+      "path": "data/q3_algorithm_metrics_exact.csv",
+      "size": 2207,
+      "sha256": "8f8de04543a14c0cd8cda9aee08951914ff288a31a3037ab70627223283ecb75"
+    },
+    {
+      "path": "data/q3_compromise_candidates.csv",
+      "size": 781,
+      "sha256": "8a11d613bb820bdfd37d94fd1edf47719fa74f6e4a32a4c05a2ed6b481588e8f"
+    },
+    {
+      "path": "data/q3_cross_model_candidate_scores.csv",
+      "size": 2850,
+      "sha256": "bff72a31539f223afe76596d9d5b36a114aa45c3a10e7264918880ac3ddffc4e"
+    },
+    {
+      "path": "data/q3_decision_criteria_comparison.csv",
+      "size": 433,
+      "sha256": "4d6210f9c18c02c2a816094fac3a81da86f4f7ae5f92883839f95097496961b1"
+    },
+    {
+      "path": "data/q3_grid_refinement_convergence.csv",
+      "size": 161,
+      "sha256": "79a1c3bd53a6c31acd4b1698985e142e13fa831275a621732eb8906c7bc58692"
+    },
+    {
+      "path": "data/q3_local_refinement.csv",
+      "size": 817,
+      "sha256": "d817165ab8066cc2018d49a1559992328b4d0d8226e9e3af3d6cdbd8388a157c"
+    },
+    {
+      "path": "data/q3_normalization_sensitivity.csv",
+      "size": 3285,
+      "sha256": "325de7b6654fdfb4fd1336604362d41d62f6c52394d13e935e796627420a8b0b"
+    },
+    {
+      "path": "data/q3_nsga2_runs.csv",
+      "size": 221040,
+      "sha256": "43a94e85a539bc79f9a0b7a197f109407bd712f418348c05d9cabdddc4679152"
+    },
+    {
+      "path": "data/q3_nsga2_trace.csv",
+      "size": 42306,
+      "sha256": "44fff6ef47f906c3035b5ddc3d686ae58681a7065bdb1e0a2d6de389a7906c9e"
+    },
+    {
+      "path": "data/q3_pareto_global.csv",
+      "size": 1386137,
+      "sha256": "bbaef95706c7efb01c275894065cf3405b075b9639660a9933307f282569f60a"
+    },
+    {
+      "path": "data/q3_pareto_nsga2.csv",
+      "size": 153715,
+      "sha256": "6d4c6875891f8f79fe4aae71ff14a5194d9febf11325dd8aeaac4156687781db"
+    },
+    {
+      "path": "data/q3_pareto_reference_merged.csv",
+      "size": 1510548,
+      "sha256": "5507968a60a2980998cb23a4818957293ca5156d37fb73e79d49776ed1b48ecc"
+    },
+    {
+      "path": "data/q3_payoff_matrix.csv",
+      "size": 211,
+      "sha256": "81fa9021c4c6be26162457f62223d60d84256f442f1c8b1345505426103867e7"
+    },
+    {
+      "path": "data/q3_surrogate_front_comparison.csv",
+      "size": 304,
+      "sha256": "609c9e41d6fd5ac7877f1ece794a4e32744ac96ca7980881e927624e373e9325"
+    },
+    {
+      "path": "data/validation/q3_model_reoptimization.csv",
+      "size": 883,
+      "sha256": "77cdd8cc14c59a5d58c0b5b3e2d40827c378b6976b6816914333af4e2524aa31"
+    },
+    {
+      "path": "drafts/q3_demo.pdf",
+      "size": 3535651,
+      "sha256": "466bfb4c3df11d71c3f92cf41e7b5cd1dd44dc006d13c20ffb56a25e4accd9ca"
+    },
+    {
+      "path": "drafts/q3_demo.tex",
+      "size": 13901,
+      "sha256": "fc8ad44f8108aa0ac16fbd57e681fd04b36eb49799396d5fa257cf2642fd89a2"
+    },
+    {
+      "path": "figures/fig_q3_01_pareto_front.pdf",
+      "size": 4051777,
+      "sha256": "c36b6a11fdde32efcb8aab1d9cd6b5b81a0e47de2cf6986c5ec9ec7f383f1402"
+    },
+    {
+      "path": "figures/fig_q3_02_candidate_comparison.pdf",
+      "size": 26077,
+      "sha256": "ad63642c46706ef5d087328ca5ca7dc645a5ceb12f51c04e59883ff2e1d9b1ed"
+    },
+    {
+      "path": "figures/fig_q3_03_design_slice.pdf",
+      "size": 31458,
+      "sha256": "40f4833fb3da2762e20289cc5ce7d795db434f85dd16eed1cd7a528adb576b97"
+    },
+    {
+      "path": "figures/fig_q3_04_algorithm_comparison.pdf",
+      "size": 20126,
+      "sha256": "568e6e48266f5cfa39d18e13d2c1feeb1a1013851b81764d8a3c95708cac5e2f"
+    },
+    {
+      "path": "README.md",
+      "size": 479,
+      "sha256": "c2cad912e08eaca0fc6ac69b5469fe9848df526bb2530f19458a72244429f5b1"
+    },
+    {
+      "path": "result-summary.md",
+      "size": 338,
+      "sha256": "61acff5f26cfccc6b6b5200d282200480bb1647c23ccb507aafe83f524dc78a5"
+    },
+    {
+      "path": "source-manifest.md",
+      "size": 491,
+      "sha256": "6338298fd36cbf4a28af30e5cf8194aaae37e191d0d50829078b432df2a67a29"
+    }
+  ]
+}

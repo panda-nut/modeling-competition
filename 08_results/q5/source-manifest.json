@@ -1,0 +1,202 @@
+{
+  "question": "q5",
+  "progress": "completed",
+  "stage": "result",
+  "review": "pass_with_limits",
+  "evidence_id": "E-Q5-FUSED-001",
+  "source_commit": "47f9947846c6a2e64c571c8a1fc1d675df7ae849",
+  "updated_at": "2026-08-01 11:23:20 CST",
+  "promotion_route": "direct_user_exception",
+  "files": [
+    {
+      "path": "code/q1_q5_reproduction_validation.py",
+      "size": 12427,
+      "sha256": "26e6bb6412ebef8bef1cbe640ccd044fe47914971c90c7600ffaaea358d2b099"
+    },
+    {
+      "path": "code/q5_analyze_risk.py",
+      "size": 14222,
+      "sha256": "5db7e83020d727c12fbf0e2765201d425b3c20c61e881cf72b2cae6b0a83e53d"
+    },
+    {
+      "path": "code/q5_analyze_sensitivity.py",
+      "size": 11986,
+      "sha256": "505132f1e714dece241c8ca3cf00a535d0d11c34b9ea30c3d6af4f28a339080c"
+    },
+    {
+      "path": "code/q5_optimize_robustness.py",
+      "size": 20126,
+      "sha256": "7470a122777da11225b0c9ee59b167b4dbb2f2c62ed94f8ee491b2b05654d95d"
+    },
+    {
+      "path": "code/q5_plot_results.py",
+      "size": 3599,
+      "sha256": "587273ec312af2705be33df72dcbc1137e8798b3353b61d67941efa4aebb51da"
+    },
+    {
+      "path": "code/q5_validate_domain.py",
+      "size": 12150,
+      "sha256": "94ebdf352eab1ea289f46576c0c3cc084b9d1d44f469d431a0be7aa503cbec56"
+    },
+    {
+      "path": "data/q5_cross_scenario_regret.csv",
+      "size": 149268,
+      "sha256": "c9dd6006906663c38b0e5e95005a2be7afb21389251294b85fa61a8544b7c1eb"
+    },
+    {
+      "path": "data/q5_dominant_metric_switch.csv",
+      "size": 148,
+      "sha256": "705acd13cfa482285ec791445a641804c78f2ffee11a100d7fe58745dddd306d"
+    },
+    {
+      "path": "data/q5_error_distribution_comparison.csv",
+      "size": 620,
+      "sha256": "819a542b02511c18c0345e146cc13ae1960bcd96bcf354e95fe1942901086fa0"
+    },
+    {
+      "path": "data/q5_formal_domain_risk.csv",
+      "size": 358,
+      "sha256": "f6e3ceaf18eba6d648d27671902393c9d589321b06f80dd613fd2d60fea5b44a"
+    },
+    {
+      "path": "data/q5_local_sensitivity.csv",
+      "size": 372,
+      "sha256": "1b77c998727d208435e5d8909b26ca3c126e9d099ff68cb970cefa08a24582a8"
+    },
+    {
+      "path": "data/q5_model_ambiguity_robust.csv",
+      "size": 665,
+      "sha256": "9acaa1f79b4e2fba36144495204f5da556db6536aea117bd65a1b55ddccbdc54"
+    },
+    {
+      "path": "data/q5_operation_design_comparison.csv",
+      "size": 1091,
+      "sha256": "0426235abba7808b802adf82410584b5d8254574151f84d985910514cbe5e6a0"
+    },
+    {
+      "path": "data/q5_operation_scenarios.csv",
+      "size": 2542,
+      "sha256": "a566bee6280e11883fa3751648fa500fdfd1a08d062e98aa00efd1b40a047531"
+    },
+    {
+      "path": "data/q5_operation_src_S2A.csv",
+      "size": 394,
+      "sha256": "24d62e90ac5e9df6510f13fcad8f05f9c54a833a67eae9fc03ddbd2a20e4a133"
+    },
+    {
+      "path": "data/q5_perturbation_domain_check.csv",
+      "size": 465,
+      "sha256": "08f70b9428d4da71163d1187fa8d2bf6f027a5646ec751abc5397d2f8d4e5ee3"
+    },
+    {
+      "path": "data/q5_signed_src.csv",
+      "size": 647,
+      "sha256": "5f267922bcfdc2654cb4224ddfd5b6873d167e38c75d32c69b055d21f093e026"
+    },
+    {
+      "path": "data/q5_sobol_indices.csv",
+      "size": 470,
+      "sha256": "3fbc76f1a8e4af658bee1f153975e91363aeb5d6cb4bc434b088ed8a07b102db"
+    },
+    {
+      "path": "data/q5_src_r2.csv",
+      "size": 221,
+      "sha256": "f66eda178d203b952c87610982a1396919eade7d30655ac160dd7f77180f9abd"
+    },
+    {
+      "path": "data/q5_structure_layer_optima.csv",
+      "size": 626,
+      "sha256": "0ff65fd3d92192bb29979874c4bfd8cd2c05963cb723677eca51da2629af76db"
+    },
+    {
+      "path": "data/q5_structure_propagation.csv",
+      "size": 2086,
+      "sha256": "6aa612411021e5f58c883e36b5c07e17bc516cf16bdf6f7bf334f018bc28cc58"
+    },
+    {
+      "path": "data/q5_structure_risk_comparison.csv",
+      "size": 1063,
+      "sha256": "e95fb0593c0b1a8e3fbe719a169e2a88a2ab5520e6531f791fc450b0771fa275"
+    },
+    {
+      "path": "data/q5_structure_src.csv",
+      "size": 204,
+      "sha256": "084b7e48907ec37c2254c43cf294e0fd063769e7bf4b3b31b1d1450bc9a2ae5e"
+    },
+    {
+      "path": "data/reproduction/q2_q5_reproduction_checks.csv",
+      "size": 1520,
+      "sha256": "e08befda3e55a5215a2bbe11c8bf4dc6f826bbc6ab830275b934958e240c6b31"
+    },
+    {
+      "path": "data/reproduction/q2_q5_reproduction_evidence.json",
+      "size": 5054,
+      "sha256": "469659b9639660ae79be2234a3344aec7643d2d2c67a5917c83ac6cd2c8b0ab0"
+    },
+    {
+      "path": "data/reproduction/q2_q5_reproduction_report.md",
+      "size": 2850,
+      "sha256": "d3b57efd0961920d83257216b43284a3ee910c67854be57f952b73cc559fab1a"
+    },
+    {
+      "path": "data/reproduction/README.md",
+      "size": 655,
+      "sha256": "3287d4002bdbb7ab105be3a01d407fe0bf7d057d3b985fc99f6da515ae18f047"
+    },
+    {
+      "path": "data/validation/q5_operation_pressure_test.csv",
+      "size": 436,
+      "sha256": "295c8cf821cd93d78aeea6da0fe3ca1824309b0f8960f42b82dab4461a3eba63"
+    },
+    {
+      "path": "data/validation/q5_worst_case_summary.json",
+      "size": 124,
+      "sha256": "b4bb64393d21c956a200918dfed38633cdd4e825bc90a3175b70a67bc411b170"
+    },
+    {
+      "path": "drafts/q5_demo.pdf",
+      "size": 130117,
+      "sha256": "7a0c853a8c051743cfc83987ec075228facfae6c10fc3e9e9025c42f4c4b45ef"
+    },
+    {
+      "path": "drafts/q5_demo.tex",
+      "size": 4155,
+      "sha256": "5c17ded8964c559a47fb9655101f8e27423f2000259bbd66e41c2416c7e424d0"
+    },
+    {
+      "path": "figures/fig_q5_01_structure_risk.pdf",
+      "size": 23385,
+      "sha256": "290578848b55bc6faa8ec68f1468467e0139f5ceb4863298f884b508aa95048d"
+    },
+    {
+      "path": "figures/fig_q5_02_operation_envelope.pdf",
+      "size": 20757,
+      "sha256": "612bca7e478f2f93bb84fe8bd483f443b7d38d97850ea2a76b4d1cb91e69008e"
+    },
+    {
+      "path": "figures/fig_q5_03_sensitivity.pdf",
+      "size": 22968,
+      "sha256": "37a62892bc3b0d72df4be9a90396dfc209a628d155587b245f8003a359702c8d"
+    },
+    {
+      "path": "figures/fig_q5_04_signed_sensitivity.pdf",
+      "size": 24390,
+      "sha256": "9e27d8b9a015227d92b54b543202330819b6d71196ce2717cedd256ef3948a59"
+    },
+    {
+      "path": "README.md",
+      "size": 478,
+      "sha256": "c082796fd778d630111ff527d8c3438441653086fe434b1bd7fab52ea52b6782"
+    },
+    {
+      "path": "result-summary.md",
+      "size": 398,
+      "sha256": "b3b1c9325fe9431066a84d55fbe85558566cb48312e61feef77ec0d0b46c406f"
+    },
+    {
+      "path": "source-manifest.md",
+      "size": 488,
+      "sha256": "6d20e19ebcdd88d58b7a4332d6623bed69175934789ec63beb42173d0cd46962"
+    }
+  ]
+}
