@@ -213,7 +213,7 @@ YAML 或 JSON 元数据，至少包含：`question`、`progress`、`stage`、`re
 
 - 仓库只保存可复用的依赖声明；Python、R、MiKTeX 的本机路径、版本审计、安装记录和命令行跟进不得写入 `environment.md` 或其他受版本管理文件。
 - 使用项目虚拟环境，不依赖系统默认 `python`。
-- 依赖写入 `requirements.txt`；测试和质量工具写入 `requirements-dev.txt`。
+- 可复用依赖声明统一写入 `environment.md`；不得再以已删除的 `requirements.txt` 或 `requirements-dev.txt` 作为仓库入口。
 - 新增第三方库前先检查现有依赖；新增后更新依赖文件并执行导入测试。
 - 程序按 `model/`、`validation/`、`plotting/` 分开。
 - 建议名称：
