@@ -208,9 +208,9 @@ YAML 或 JSON 元数据，至少包含：`question`、`progress`、`stage`、`re
 
 ## 9. 代码和环境
 
-- 项目基准环境：Python 3.14、MiKTeX 26.1；R 版本以实际验证后的 `environment.md` 为准。
+- 可复用依赖声明统一写入 `environment.md`；本机环境配置不作为仓库依赖入口。
 - 使用项目虚拟环境，不依赖系统默认 `python`。
-- 依赖写入 `requirements.txt`；测试和质量工具写入 `requirements-dev.txt`。
+- 不得再以已删除的 `requirements.txt` 或 `requirements-dev.txt` 作为仓库依赖入口。
 - 新增第三方库前先检查现有依赖；新增后更新依赖文件并执行导入测试。
 - 程序按 `model/`、`validation/`、`plotting/` 分开。
 - 建议名称：
