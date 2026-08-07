@@ -1,0 +1,468 @@
+% 全国大学生数学建模竞赛论文
+\documentclass[12pt,a4paper]{article}
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage[UTF8]{ctex}
+\usepackage{fontspec}\setmainfont{Times New Roman}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx,float,subcaption,booktabs,longtable,array,multirow}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{listings,xcolor,enumitem,setspace,fancyhdr,appendix,ragged2e}
+\usepackage[hidelinks]{hyperref}\usepackage{cite}
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
+\newcommand{\abskey}[1]{{\heiti\boldmath #1}}
+\onehalfspacing
+\graphicspath{{08_results/q1/figures/}{08_results/q3/figures/}{08_results/q4/figures/}{08_results/q5/figures/}{CUMCM_Template/figures/}}
+\lstset{basicstyle=\small\ttfamily,numbers=left,numberstyle=\tiny,frame=single,breaklines=true,showstringspaces=false,language=Python}
+\pagestyle{fancy}\fancyhf{}\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}
+\begin{document}
+\begin{center}
+\vspace*{1.2cm}
+{\linespread{1.8}\selectfont\Huge\bfseries 高性能芯片歧管式微通道热管理系统的\\多目标优化和鲁棒设计}
+\end{center}
+\vspace{0.8cm}
+\begin{center}\textbf{\LARGE 摘\quad 要}\end{center}
+\vspace{0.45cm}
+\begin{spacing}{1.25}
+\justifying
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.25em}
+针对\abskey{高热流密度芯片歧管式微通道冷却系统}，本文研究针肋宽度比 $a$、歧管深高比 $b$ 和针肋排数 $N$ 对无量纲热阻 $R$、压降 $P$ 与温度非均匀性 $U$ 的耦合影响，建立\abskey{机理分析、代理建模、多目标优化和鲁棒决策}的一体化框架。
+
+首先，从过流面积、湿润换热面积、局部阻力和支路供液平衡解释结构--性能关系。附件数据表明：$a=0.2$ 对应较低的热阻和温度非均匀性，增大 $b$ 明显降低压降，增加 $N$ 总体降低热阻但提高压降。其次，将有针肋与无针肋样本分支建模，分别采用\abskey{三次 Ridge 和 PCHIP}；三次 Ridge 对 $R,P,U$ 的平均 NRMSE 为\abskey{$6.54\times10^{-6}$、$0.003737$ 和 $0.003634$}。
+
+随后，结合\abskey{$401\times401$ 分层网格、20 次分层 NSGA-II 和连续精化}构造 Pareto 参考集。增强切比雪夫判据得到\abskey{名义折中方案 $(a,b,N)=(0.224932,4.5,6)$}，预测性能为\\[-0.1em]
+\mbox{\abskey{$(R,P,U)=(0.734330,0.097996,0.790195)$}}。完整权重单纯形下，\abskey{绝对和相对最小最大遗憾}均选择该方案；受限权重域中推荐会发生切换，说明偏好鲁棒性依赖权重域和遗憾定义。
+
+最后，针对名义解位于 $b$ 上边界的问题，在域内鲁棒可行集上最小化 CVaR95，得到\abskey{加工鲁棒方案 $(0.224006,4.4625,6)$}，\abskey{CVaR95 约为 $0.41893$}，且六种加工误差设定均保留 $N=6$。因此，名义比较采用前一方案，\abskey{制造实施优先采用加工鲁棒方案}；代理模型结论仅适用于附件设计域和已声明情景。
+\end{spacing}
+
+\vspace{0.3cm}
+\noindent{\bfseries 关键字：}歧管式微通道；三次 Ridge；PCHIP；NSGA-II；Pareto 前沿；CVaR
+\newpage
+
+\section{问题的背景与重述}
+\subsection{问题背景}
+人工智能训练、高性能计算和先进封装使单位面积发热量迅速增加。若热量不能及时排出，结温升高会造成器件性能下降、寿命缩短甚至失效。微型散热器中的强化换热、热点控制和温度均匀性是相互耦合的工程目标\upcite{ref1}。传统直通式微通道虽具有较大的换热面积，但长流道导致沿程压降和温升累积。歧管式微通道通过入口、出口歧管缩短有效流动路径，针肋则通过扰动边界层和扩大湿润面积强化换热，因此成为高热流密度芯片热管理的重要候选结构\upcite{ref2}。
+
+结构强化并非没有代价：针肋增多或变宽会挤压流道、增加局部阻力；歧管加深虽能改善流量分配，却可能影响热阻和整体尺寸。因此，设计问题本质上是散热能力、泵送代价和热点可靠性三者之间的多目标权衡。与只追求最低热阻的单目标设计相比，多目标算法能够保留工程上有价值的折中解集\upcite{ref3}。
+
+\subsection{问题重述}
+设针肋宽度比为 $a$，歧管深高比为 $b$，针肋排数为离散变量 $N$。附件给出不同参数组合下的无量纲热阻 $R$、压降 $P$ 和温度非均匀性 $U$，三项指标均越小越好。五个问题并非相互独立，而是按照“解释规律--建立映射--搜索方案--处理偏好--控制风险”的逻辑逐层递进，整体建模流程如图\ref{fig:overall-flow}所示。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=0.42cm,
+    >={Latex[length=2.2mm]},
+    flow/.style={
+        rectangle,
+        rounded corners=2pt,
+        draw=black!55,
+        line width=0.6pt,
+        minimum height=1.75cm,
+        text width=2.25cm,
+        align=center,
+        inner sep=4pt,
+        font=\small
+    },
+    link/.style={->,line width=0.8pt,draw=black!65}
+]
+\node[flow,fill=gray!13] (m1) {\textbf{机理分析}\\[2pt]
+结构参数\\$\downarrow$\\流动与换热特征};
+\node[flow,fill=blue!9,right=of m1] (m2) {\textbf{分段代理模型}\\[2pt]
+三次 Ridge\\与 PCHIP};
+\node[flow,fill=green!10,right=of m2] (m3) {\textbf{Pareto 优化}\\[2pt]
+分层网格\\NSGA-II 与精化};
+\node[flow,fill=yellow!13,right=of m3] (m4) {\textbf{偏好鲁棒}\\[2pt]
+权重单纯形\\最小最大遗憾};
+\node[flow,fill=red!8,right=of m4] (m5) {\textbf{加工与工况鲁棒}\\[2pt]
+域内 CVaR\\参数化压力测试};
+\draw[link] (m1) -- (m2);
+\draw[link] (m2) -- (m3);
+\draw[link] (m3) -- (m4);
+\draw[link] (m4) -- (m5);
+\end{tikzpicture}
+\caption{五个问题的递进建模流程}
+\label{fig:overall-flow}
+\end{figure}
+图\ref{fig:overall-flow}体现了五问之间的输入输出关系：问题一提供变量作用方向和物理解释，问题二把离散数据转化为可计算的性能映射，问题三在合法域内生成非支配方案，问题四进一步引入决策偏好，问题五再检验制造与工况扰动。因而后续各问不是彼此独立地重复寻优，而是在前一问的证据和约束上逐层增加决策条件。
+
+\textbf{问题一：机理建模与影响规律分析。}从有效过流面积、湿润换热面积、局部阻力和支路供液平衡出发，建立“结构参数--流动换热特征--性能响应”的机理链；结合附件数据的边际效应与交互效应，分析 $a,b,N$ 对 $R,P,U$ 的影响规律，并说明三项指标作为综合评价依据的必要性。
+
+\textbf{问题二：代理模型建立与评估。}针对有针肋和无针肋两类不连通结构，分别建立三次 Ridge 响应面和 PCHIP 保形插值模型，刻画 $(a,b,N)$ 到 $(R,P,U)$ 的映射关系；通过嵌套重复交叉验证、编码对照和结构化留出评估模型精度，明确代理模型的合法设计域与外推边界。
+
+\textbf{问题三：多目标优化与折中设计。}以 $R,P,U$ 同时最小化为目标建立三目标优化模型，采用分层致密网格、20 次分层 NSGA-II 和连续精化构造 Pareto 参考前沿；比较增强切比雪夫、最近理想点和平均归一化损失等准则，给出与决策判据相匹配的名义折中方案。
+
+\textbf{问题四：权重敏感性分析与偏好鲁棒设计。}考虑不同应用场景对散热能力、泵送代价和温度均匀性的偏好差异，在权重单纯形及受限权重域内分析最优方案的切换规律；分别计算绝对和相对最小最大遗憾，给出带有权重域和遗憾定义条件的偏好鲁棒方案。
+
+\textbf{问题五：加工误差与工况波动下的鲁棒性分析。}考虑结构参数加工误差及流量、热负荷等参数化工况波动，先检查扰动样本是否位于代理模型合法域，再采用 CVaR、确定性角点和跨情景最小最大模型遗憾评估风险，形成面向制造实施的鲁棒设计建议及其适用边界。
+
+\section{问题分析}
+\subsection{问题一：结构参数–性能指标机理模型}
+问题一的关键不是直接选取最优点，而是解释“参数为何如此影响响应”。本文把几何参数映射到有效过流面积、湿润面积、局部流速及支路流量差异，再由这些中间量解释 $R,P,U$。由于附件是单次全因子组合，均值和交互残差可用于描述规律，但没有独立重复，不能将小残差直接解释为统计显著。
+
+\subsection{问题二：代理模型建立与评估}
+数据同时包含有针肋和无针肋两类结构，两类结构在几何含义上并不连续。若直接统一插值，可能在不存在的中间结构上产生虚假预测。因此采用分支策略：有针肋样本用带正则化的三次多项式拟合，无针肋基线沿 $b$ 用 PCHIP 插值，并用嵌套重复交叉验证选择复杂度与正则强度。
+
+\subsection{问题三：多目标优化与折中设计}
+三个指标彼此竞争，单一加权和可能遗漏非凸前沿。因此先构造覆盖充分的 Pareto 参考集，再通过增强切比雪夫、最近理想点等准则选取可解释的折中设计。连续变量 $a,b$ 与离散变量 $N$ 分层求解，避免将 $N$ 当作任意连续量。
+
+\subsection{问题四：权重敏感性分析与偏好鲁棒设计}
+不同应用对散热、泵功与均匀性的偏好不同。本文扫描权重单纯形，对每个权重计算最优方案和候选遗憾，并比较完整、平衡及散热优先等权重域。鲁棒方案的含义严格限定为给定权重域与遗憾定义下最坏后悔最小。
+
+\subsection{问题五：参数扰动与灵敏度分析}
+制造后的实际参数会围绕设计值波动。若设计点贴在代理域边界，任一对称扰动都可能导致域外预测。故问题五首先检查扰动支持集的合法性，再用尾部风险 CVaR95 评价加工波动，并按已声明的参数化情景处理工况不确定性。
+
+\section{模型假设}
+\subsection{基本假设}
+\begin{enumerate}[label=\arabic*.]
+\item 附件 CFD 数据在给定边界条件下可信，本文不修改原始响应值。
+\item $R,P,U$ 的无量纲定义与附件一致，三者均按越小越优处理。
+\item 代理模型只在附件覆盖的合法设计域内用于插值，不保证域外预测精度。
+\item $N$ 为离散结构变量，只取附件允许的层级；有针肋与无针肋分支不连续插值。
+\item 加工扰动与工况集合按结果包中已声明的参数化模型执行；它们不等同于实测随机分布。
+\item 评价权重非负且和为 1；不同权重域对应不同工程偏好。
+\item 题设工况下芯片热负荷和入口条件固定；无量纲指标的反归一化公式未知，故只比较同一指标的相对变化。
+\end{enumerate}
+
+\section{符号说明}
+本文使用的主要符号见表\ref{tab:symbols}。
+\begin{table}[H]\centering\small\renewcommand{\arraystretch}{1.15}\caption{主要符号}\label{tab:symbols}\begin{tabular}{ccc}\toprule
+符号&含义&说明\\\midrule
+$a$&针肋宽度比&连续设计变量\\
+$b$&歧管深高比&连续设计变量\\
+$N$&针肋排数&离散设计变量\\
+$R$&无量纲热阻&越小越好\\
+$P$&无量纲压降&越小越好\\
+$U$&无量纲温度非均匀性&越小越好\\
+$q'''$&芯片体积热源&热量校核参数\\
+$V_c$&芯片体积&热量校核参数\\
+$\dot m$&冷却液质量流量&运行参数\\
+$c_p$&冷却液定压比热&流体物性参数\\
+$w_c$&微通道宽度&几何参数\\
+$d_p$&针肋直径&$d_p=aw_c$\\
+$H_c$&微通道高度&几何参数\\
+$\mathcal R_j$&第 $j$ 条支路的等效水力阻力&支路水力参数\\
+$w_i$&第 $i$ 项指标权重&$w_i\ge0,\sum w_i=1$\\
+$z_i$&归一化性能损失&越小越好\\
+$\mathcal P$&Pareto 非支配解集&候选方案集合\\
+$\mathrm{CVaR}_{95}$&95\% 条件风险价值&尾部平均风险\\\bottomrule
+\end{tabular}\end{table}
+
+\section{模型的建立与求解}
+\subsection{问题一模型的建立与求解}
+\subsubsection{数据概览}
+附件含 84 组 CFD 组合，其中有针肋样本覆盖 $a,b,N$ 的全因子层级。三项响应量纲不同但方向一致，均以较小值为优。本文先按因子水平计算边际均值，再以
+\begin{equation}d_{f,l}^{(y)}=\frac{\bar y_{f=l}-\bar y}{\bar y}\times100\%\end{equation}
+衡量水平相对总体均值的偏移。该量用于比较效应大小，不作为显著性检验统计量。
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\textwidth]{fig_q1_01_main_effects.pdf}
+\caption{设计参数对三项性能的边际主效应}\label{fig:q1-main-effects}\end{figure}
+图\ref{fig:q1-main-effects}中不同响应曲线的方向并不一致：增大某一参数可能改善热阻，却同时恶化压降或温度均匀性；部分曲线还呈现明显弯曲，说明简单线性关系不足以概括全部规律。这一现象一方面支持保留三个性能目标，另一方面提示后续代理模型需要容纳非线性与交互项。下面从流动阻塞、换热扩面和支路分配三个方面解释这些数据特征。
+
+\subsubsection{结构参数–性能指标机理模型的建立}
+首先利用能量守恒确定热量尺度。若芯片体积热源为 $q'''$、体积为 $V_c$，则总热负荷为 $Q=q'''V_c$；在质量流量 $\dot m$ 与定压比热 $c_p$ 已知时，冷却液完全混合后的理想温升为
+\begin{equation}\Delta T_b=\frac{Q}{\dot m c_p}.
+\end{equation}
+该式只用于校核热量量级，不代表芯片最高温升，也不用于反推题目未公开的无量纲指标定义。
+
+令通道宽度为 $w_c$、针肋直径为 $d_p=aw_c$。针肋增大会同时减小有效过流面积并增大侧表面积：
+\begin{equation}A_f(a)=A_{f,0}-A_{\mathrm{block}}(a),\qquad
+A_{\mathrm{pin,side}}(a,N)\propto N\pi aw_cH_c.
+\end{equation}
+因此 $a,N$ 同时引入“扩面强化”和“阻塞增阻”。针肋微通道研究同样指出几何强化与流动阻力存在竞争关系\upcite{ref2}。
+
+压降可概括为沿程和局部两部分：
+\begin{equation}\Delta p=\left(f\frac{L}{D_h}+\sum_j K_j\right)\frac{\rho v^2}{2}.\end{equation}
+当 $a$ 或 $N$ 增大时，有效过流面积减小且绕流次数增加，$v$、$K_j$ 往往上升，因而 $P$ 增大。换热侧可用 $R_{th}=\Delta T/Q$ 表示；针肋增加湿润面积并破坏热边界层，通常使 $R$ 降低，但过度拥塞会削弱流量分配。$U$ 反映热点和面内温差，既受局部换热强化影响，也受各支路流量均匀性控制。
+
+进一步将第 $j$ 条支路写为水力平衡
+\begin{equation}\Delta p_j=\mathcal R_j(a,N)\dot V_j+\frac{1}{2}\rho K_j(a,N)u_j^2,
+\qquad \sum_j\dot V_j=\dot V,
+\end{equation}
+并以 $\Delta T_{b,j}=Q_j/(\dot m_jc_p)$ 描述支路混合温升。由此可将 $U$ 理解为支路流量、局部热阻与支路温升离散程度的增函数，说明 $U$ 与平均热阻 $R$ 在工程意义上不可互相替代。
+
+\subsubsection{影响规律分析}
+边际结果显示，$a=0.2$ 对应较低的 $R$ 与 $U$；$a$ 继续增至 $0.3$ 后，阻塞效应增强。$b$ 从 3 增至 4.5 时，$P$ 明显下降；$N$ 从 2 增至更高层级时，$R$ 总体下降而 $P$ 上升，且 $U$ 并非严格单调。这说明设计变量与性能之间存在非线性和交互。
+
+利用平衡 $4\times4\times5$ 全因子结构，可将确定性响应写为
+\begin{equation}y_{ijk}=\mu+A_i+B_j+C_k+(AB)_{ij}+(AC)_{ik}+(BC)_{jk}+(ABC)_{ijk},
+\end{equation}
+并用 $\eta_S^2=SS_S/SS_T$ 描述各效应占总平方和的比例。表\ref{tab:q1-factor-effects}中的结果是确定性效应分解，不进行 $p$ 值检验。
+\begin{table}[H]\centering\small\caption{全因子主效应与交互效应贡献率（\%）}\label{tab:q1-factor-effects}
+\begin{tabular}{cccccccc}\toprule
+响应&$a$&$b$&$N$&$a\times b$&$a\times N$&$b\times N$&三阶\\\midrule
+$R$&23.87&31.80&28.71&0.65&5.94&6.07&2.97\\
+$P$&31.70&38.89&18.13&0.00&11.25&0.01&0.01\\
+$U$&24.29&16.66&48.00&6.24&2.42&2.24&0.14\\\bottomrule
+\end{tabular}\end{table}
+热阻由 $a,b,N$ 共同控制；压降以 $b,a$ 为主，且 $a\times N$ 达 11.25\%，反映阻塞与排数累积；温度非均匀性中 $N$ 的贡献最高。该结果也解释了不同 $N$ 层在 Pareto 前沿上形成分支的原因。
+
+从边际均值的端点变化看，$a$ 由 0.1 增至 0.3 时 $P$ 增加约 37.3\%；$b$ 由 3 增至 4.5 时 $P$ 下降约 32.2\%，同时 $R$ 上升约 1.94\%；$N$ 由 2 增至 10 时 $R$ 下降约 2.18\%、$P$ 上升约 30.9\%。在考察水平中，$a=0.2$ 对应 $R,U$ 的较低边际均值，$N=4$ 对应最低的 $U$ 边际均值。这些量化趋势支持机理链，但边际最优不等于三变量联合最优。
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.9\textwidth]{fig_q1_04_interaction_effects.pdf}
+\caption{结构参数的描述性交互效应}\label{fig:q1-interactions}\end{figure}
+图\ref{fig:q1-interactions}进一步表明，同一参数变化在不同搭配水平下产生的响应幅度并不恒定。其中 $a$ 与 $N$ 的组合对压降的影响较突出，与表\ref{tab:q1-factor-effects}中 $a\times N$ 的贡献率相互印证；热阻和温度非均匀性则由多组主效应与交互共同决定。因此，后续优化不能把三个设计变量分别取边际最优后直接拼接，而应在联合设计空间内比较完整方案。
+
+\subsubsection{三项指标作为系统综合评价依据的合理性}
+$R$ 衡量散热能力，$P$ 对应泵送能耗，$U$ 对应热点可靠性。低热阻方案未必低压降，平均温度较低也不必然意味着温度均匀。三项指标的工程含义和数据变化均不可互相替代，因此后续保留完整三目标，而不提前压缩成单指标。
+
+\subsection{问题二代理模型的建立与评估}
+\subsubsection{分支代理模型的构建}
+附件 84 组数据由两个不连通分支组成：80 个有针肋样本形成 $4\times4\times5$ 平衡全因子设计，4 个无针肋样本满足 $(a,N)=(0,0)$。合法域写为
+\begin{equation}
+\Omega=\{0.1\le a\le0.3,\ 3\le b\le4.5,\ N\in\{2,4,6,8,10\}\}
+\cup\{a=0,N=0,3\le b\le4.5\}.
+\end{equation}
+不存在 $a=0,N>0$ 或 $a>0,N=0$ 的合法结构，因此不能把两分支强行拼接为连续三维曲面。对训练折内输入标准化为 $\xi_j=(x_j-\mu_j)/s_j$，所有标准化参数只由训练折估计，以避免验证信息泄漏。
+
+本节比较二次、三次和四次多项式 Ridge，正式模型依据嵌套重复交叉验证结果，并综合精度、稳定性和计算成本后选用三次 Ridge：
+\begin{equation}\hat y=\beta_0+\sum_i\beta_i x_i+\sum_{i\le j}\beta_{ij}x_ix_j+\sum_{i\le j\le k}\beta_{ijk}x_ix_jx_k,\end{equation}
+参数通过最小化 $\|y-X\beta\|_2^2+\alpha\|\beta\|_2^2$ 求得。无针肋分支只沿 $b$ 采用 PCHIP，以保持样本单调形状且避免过冲。正式模型为三次 Ridge 与 PCHIP，不使用 GPR。
+
+无针肋分支仅包含 $b$ 的 4 个离散节点，对应 3 个相邻插值区间。因此，PCHIP 只用于 $b\in[3,4.5]$ 内的保形插值，不据此识别复杂响应规律，也不作域外预测；受样本量限制，该分支无法进行与有针肋模型同等强度的独立交叉验证。
+
+\subsubsection{交叉验证与模型对比}
+外层折估计泛化误差，内层折选择多项式阶数与 Ridge 正则强度。对响应 $y$ 定义
+\begin{equation}\mathrm{NRMSE}=\frac{\sqrt{n^{-1}\sum_{i=1}^n(y_i-\hat y_i)^2}}{y_{\max}-y_{\min}}.\end{equation}
+嵌套重复交叉验证中，三次模型对 $R,P,U$ 的最低平均 NRMSE 分别为 $6.54\times10^{-6}$、$0.003737$ 和 $0.003634$。Ridge 正则用于缓解三次多项式特征之间的共线性\upcite{ref5}；无针肋分支的 PCHIP 则保持节点形状并抑制高阶插值过冲\upcite{ref6}。这些误差支持附件设计域内的高精度代理计算，表\ref{tab:q2-nrmse}列出了三个多项式阶数的对比结果。
+\begin{table}[H]\centering\small\caption{嵌套重复交叉验证平均 NRMSE}\label{tab:q2-nrmse}
+\begin{tabular}{cccc}\toprule
+响应&二次 Ridge&三次 Ridge&四次 Ridge\\\midrule
+$R$&0.094140&$6.541\times10^{-6}$&$9.105\times10^{-6}$\\
+$P$&0.024557&0.003737&0.005221\\
+$U$&0.127056&0.003634&0.005078\\\bottomrule
+\end{tabular}\end{table}
+三次模型在三个响应上均优于二次与四次模型。四次模型参数更多但折外误差反而上升，说明增加复杂度不能继续改善泛化，三次 Ridge 是精度与稳定性的合理折中。
+
+除常规嵌套交叉验证外，本文还比较排数的不同编码方式，并进行组合结构留出。数值三次编码对 $R,P,U$ 的 NRMSE 分别为 $6.64\times10^{-6}$、0.004596 和 0.004242，优于类别交互、分层响应面和机理特征编码。组合留出的 NRMSE 分别为 $6.90\times10^{-6}$、0.004370 和 0.004924；最差组合留出仍分别控制在 $1.08\times10^{-5}$、0.014732 和 0.010929。由此可见，主模型对附件域内未见组合保持稳定，但该检查仍不是域外物理验证。
+
+\subsubsection{模型选定与适用边界}
+三次 Ridge 同时兼顾精度、计算成本和数值稳定性，故作为问题三至问题五的有针肋代理。分支 PCHIP 则保留无针肋基线的结构边界。模型选择不意味着未知工况下也具有同等精度，任何越出 $a,b,N$ 合法域的计算均不进入正式结论。
+
+\subsection{问题三多目标优化与折中设计}
+\subsubsection{优化模型与求解策略}
+建立三目标模型
+\begin{equation}\min_{a,b,N}\bigl(R(a,b,N),P(a,b,N),U(a,b,N)\bigr),\quad (a,b,N)\in\Omega.\end{equation}
+先在每个离散 $N$ 层上对 $a,b$ 采用 $401\times401$ 网格，再进行 20 次 NSGA-II 搜索，最后对候选进行连续精化和非支配合并。NSGA-II 通过快速非支配排序和拥挤距离维持前沿覆盖，是多目标工程优化中的经典方法\upcite{ref3}。该组合兼顾网格的可复核性与启发式算法的搜索能力。
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.93\textwidth]{fig_q3_01_pareto_front.pdf}
+\caption{三目标 Pareto 参考前沿}\label{fig:q3-pareto}\end{figure}
+图\ref{fig:q3-pareto}中的非支配点形成多个与离散排数 $N$ 对应的分支，且不存在一个点同时占据三个坐标方向的最低端。这既直观呈现了散热、泵送与均匀性之间的竞争，也说明离散结构层级会改变可达到的折中边界。由于前沿形态本身不能证明搜索已经充分，下一步用 HV、IGD+ 和 Spacing 对网格加密过程进行收敛检查。
+
+为比较搜索质量，统一采用三维超体积 HV、反世代距离 IGD+ 与最近邻间距 Spacing。结果见表\ref{tab:q3-convergence}：随着网格加密，HV 单调增加，IGD+ 和 Spacing 持续下降。有针肋结构在五个 $N$ 层上采用 $401\times401$ 网格，共评价 804005 个方案；无针肋基线沿 $b$ 采用 2001 点加密网格，合计评价 806006 个合法候选点，并得到 16858 个非支配点。
+\begin{table}[H]\centering\small\caption{分层网格的收敛性比较}\label{tab:q3-convergence}
+\begin{tabular}{cccccc}\toprule
+方法&非支配点&HV&IGD+&Spacing&评价次数\\\midrule
+$101\times101$&1362&0.902914&0.001239&0.002824&53006\\
+$201\times201$&4679&0.903767&0.000503&0.001314&204006\\
+$401\times401$&16858&0.904148&$1.40\times10^{-5}$&0.000624&806006\\\bottomrule
+\end{tabular}\end{table}
+20 个固定种子的分层 NSGA-II 每次评价 15300 个方案，均得到非支配集；其作用是以独立随机搜索复核前沿位置，而不是取代低维问题上的确定性网格。合并参考集含 18183 个非支配点，加入权重精化后保留 218 个新点，HV 由 0.904191 增至 0.904201，说明参考集已接近稳定。
+
+\subsubsection{多准则决策与名义折中方案}
+将各响应按参考范围归一化为 $z_i$，增强切比雪夫准则为
+\begin{equation}J(x)=\max_i\{w_i z_i(x)\}+\rho\sum_iw_i z_i(x),\quad\rho>0.\end{equation}
+本文实际取 $\rho=10^{-4}$。该增强项主要用于在最大加权损失相同或接近时打破并列，决策仍由最大加权损失对最差目标的控制作用主导。
+名义折中解为
+\begin{equation}(a,b,N)=(0.224932,4.500000,6),\quad(R,P,U)=(0.734330,0.097996,0.790195).\end{equation}
+最近理想点和平均归一化损失更偏向 $N=4$，各准则的具体结果见表\ref{tab:q3-compromises}。因此本文把增强切比雪夫解称为“名义折中推荐”，而不称为无条件全局最优；它只表示在当前代理域、归一化尺度和搜索流程下的参考折中。
+
+\begin{table}[H]\centering\small\caption{不同决策准则对应的折中方案}\label{tab:q3-compromises}
+\begin{tabular}{ccccccc}\toprule
+准则&$a$&$b$&$N$&$R$&$P$&$U$\\\midrule
+增强切比雪夫&0.224932&4.5000&6&0.734330&0.097996&0.790195\\
+最近理想点&0.224961&4.5000&4&0.741104&0.085233&0.771787\\
+平均归一化损失&0.219906&4.5000&4&0.741185&0.084698&0.771889\\\bottomrule
+\end{tabular}\end{table}
+三种方案均位于 $b=4.5$ 边界，但在 $N$ 上出现分歧。增强切比雪夫控制最差目标退让，另外两种准则更强调到理想点的整体距离，因此选择较低压降和温度非均匀性的 $N=4$ 层。
+
+三个单目标锚点的响应分别为
+\[
+\begin{aligned}
+\text{热阻锚点：}&\quad(R,P,U)=(0.720227,0.158525,0.819424),\\
+\text{压降锚点：}&\quad(R,P,U)=(0.760176,0.076040,0.779150),\\
+\text{非均匀性锚点：}&\quad(R,P,U)=(0.741104,0.085238,0.771787).
+\end{aligned}
+\]
+锚点之间明显互有得失，直接说明不存在同时使三个指标各自最小的单一结构，采用 Pareto 决策而非简单求和具有必要性。
+
+\subsection{问题四的权重敏感性分析与偏好鲁棒设计}
+\subsubsection{权重敏感性分析}
+令 $W=\{w\mid w_i\ge0,\sum_iw_i=1\}$。对每个 $w$，计算候选的加权损失并记录最优设计。完整单纯形展示所有可能偏好，受限权重域则反映平衡或散热优先场景。
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.82\textwidth]{fig_q4_01_weight_mapping.pdf}
+\caption{权重单纯形上的最优设计映射}\label{fig:q4-weight-map}\end{figure}
+图\ref{fig:q4-weight-map}把每组权重对应的最优设计投影到权重单纯形上。大面积连续色块表示一类结构在相邻偏好下保持最优，色块交界则意味着较小的权重变化即可触发排数或连续参数切换。由此可见，“出现频率最高”与“最坏后悔最小”是两种不同标准，前者描述权重区域覆盖，后者关注选错方案时的最大机会损失，因此还需引入下述遗憾准则。
+
+\subsubsection{鲁棒设计选型}
+绝对遗憾定义为 $r(x,w)=L(x,w)-\min_{x'}L(x',w)$；相对遗憾再除以同权重下的最优损失。遗憾准则用于在未知偏好下限制选择错误所造成的机会损失\upcite{ref7}。完整权重单纯形中，两种最小最大遗憾均选择 $(0.224932,4.5,6)$。在平衡与散热优先权重域中，推荐随遗憾定义切换为 $N=4$ 或 $N=8$，详细比较见表\ref{tab:q4-regret}。这表明“鲁棒”必须与权重域和遗憾定义同时报告。
+
+\begin{table}[H]\centering\small\caption{权重域与遗憾定义敏感性}\label{tab:q4-regret}
+\begin{tabular}{cccccc}\toprule
+权重域&遗憾定义&权重数&$a$&$b$&$N$\\\midrule
+完整单纯形&绝对&1326&0.224932&4.5000&6\\
+完整单纯形&相对&1326&0.224932&4.5000&6\\
+$w_i\ge0.1$&绝对&666&0.217000&3.4500&4\\
+$w_i\ge0.1$&相对&666&0.224932&4.5000&6\\
+$w_R\ge0.5$&绝对&351&0.233500&3.3675&8\\
+$w_R\ge0.5$&相对&351&0.225500&3.1913&4\\\bottomrule
+\end{tabular}\end{table}
+完整单纯形同时包含极端偏好，$N=6$ 能控制最坏机会损失；排除极端权重后，绝对与相对尺度对选择的影响增大。故本文不使用“对所有偏好均唯一鲁棒”的过强表述。
+
+为检验权重网格精度，分别取 $H=25,50,100$，对应 351、1326、5151 个权重。三种离散精度均选择 $(0.224932,4.5,6)$，最坏绝对遗憾均为 1.158963；平均遗憾随加密由 0.343808 降至 0.327094。$H=50$ 时，$N=2,4,6,8,10$ 成为专属最优的权重区域占比分别为 3.85\%、55.81\%、22.70\%、2.64\%、15.01\%。$N=4$ 覆盖区域最大，而 $N=6$ 控制最坏遗憾更优，两者回答的是不同决策问题。
+
+\subsection{参数扰动与灵敏度分析}
+\subsubsection{分析方法}
+以归一化综合损失 $C$ 衡量扰动后性能，并用
+\begin{equation}\mathrm{CVaR}_{95}(C)=E\left[C\mid C\ge \mathrm{VaR}_{95}(C)\right]\end{equation}
+度量尾部风险。CVaR 用超过给定分位点的尾部平均损失评价风险，比只取单个最坏样本更稳定\upcite{ref4,ref8}。先检查每个扰动样本是否留在代理合法域，再对可行候选进行风险排序。
+
+\subsubsection{加工扰动传播与鲁棒优化}
+名义解的 $b=4.5$ 位于上边界，对称加工误差会产生 $b>4.5$ 的域外点。因此正式加工风险只纳入鲁棒可行域设计。表\ref{tab:q5-risk}显示，优化得到 $(0.224006,4.4625,6)$，CVaR95 约为 $0.41893$。表\ref{tab:q5-error-models}中的六种误差分布或幅值设定均保留 $N=6$，说明离散层级选择对已声明加工情景较稳定。
+
+正式结构扰动采用 $\tau=0.025$ 的 LHS 支持集，实际设计变量扰动为 $\Delta a=0.20\epsilon_a$、$\Delta b=1.50\epsilon_b$，对应公差范围 $\pm0.005$ 和 $\pm0.0375$；鲁棒可行域收缩为 $0.105\le a\le0.295$、$3.0375\le b\le4.4625$。工况压力测试中的流量和热负荷缩放均取 $[0.95,1.05]$，并按结果包登记的 S1--S3 与 A/B 参数化模型组合评估。
+
+\begin{table}[H]\centering\small\setlength{\tabcolsep}{3.5pt}\caption{鲁棒可行域内的加工风险比较}\label{tab:q5-risk}
+\begin{tabular}{ccccccccc}\toprule
+方案&$a$&$b$&$N$&名义评分&均值&标准差&Q95&CVaR95\\\midrule
+名义可行投影&0.224932&4.4625&6&0.404439&0.404513&0.009393&0.418165&0.419074\\
+结构鲁棒解&0.224006&4.4625&6&0.404432&0.404499&0.009351&0.418134&0.418925\\\bottomrule
+\end{tabular}\end{table}
+两方案风险差异很小，工程上真正关键的是把 $b$ 从边界 4.5 内移至 4.4625，而不是追逐 $a$ 的第六位小数。因此可将数值结果圆整为 $a\approx0.224$，再结合实际制造步长复核。
+
+\begin{table}[H]\centering\small\caption{不同加工误差设定下的鲁棒结果}\label{tab:q5-error-models}
+\begin{tabular}{ccc}\toprule
+误差设定&推荐 $N$&CVaR95\\\midrule
+独立均匀&6&0.418991\\
+对称三角&6&0.416425\\
+截断正态（$2\sigma$）&6&0.417270\\
+正相关均匀（$\rho=0.6$）&6&0.419443\\
+负相关均匀（$\rho=-0.6$）&6&0.419269\\
+确定性角点&6&0.420773\\\bottomrule
+\end{tabular}\end{table}
+六种设定均选择 $N=6$ 且 $b\approx4.4625$。概率尾部风险与确定性角点最坏情形得到一致的结构层级，提高了加工推荐对分布假设的稳定性。
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.82\textwidth]{fig_q5_01_structure_risk.pdf}
+\caption{名义方案与加工鲁棒方案的风险比较}\label{fig:q5-structure-risk}\end{figure}
+图\ref{fig:q5-structure-risk}显示，结构鲁棒方案并未以明显牺牲名义性能为代价，其主要作用是把设计从代理域上边界移入可承受双侧加工扰动的区域。结合表\ref{tab:q5-risk}可知，两方案风险数值接近，但只有域内方案能够保证全部正式扰动样本由代理模型合法插值。因此这里的推荐依据首先是扰动域合法性，其次才是 CVaR95 的细微差别。
+
+\subsubsection{工况模型歧义与 Sobol 全局灵敏度分析}
+Sobol 指标把输出方差分解为单因素主效应与交互总效应。本文只在已声明的扰动分布和代理域内解释该指标，不把代理模拟称为物理实验。六类工况模型下，最小最大模型遗憾备选为 $(0.231667,3.275,6)$，最大模型遗憾约 $0.179633$。
+
+六类情景专属最优点的 $b$ 均位于 $3.08\text{--}3.48$，故跨情景最小最大模型遗憾方案取中间位置 $b=3.275$；该方案仅在六类参数化工况具有决策代表性时作为备选，制造主推荐仍为加工鲁棒方案 $(0.224006,4.4625,6)$。
+
+在 32768 个敏感性样本下，综合评分的一阶 Sobol 指数为 $S_{\epsilon_a}=0$、$S_{\epsilon_b}=0.000834$、$S_{s_m}=0.239550$、$S_{s_q}=0.711077$；总效应指数分别为 0.000221、0.001155、0.263501、0.742890。由此，在所设工况扰动模型中热负荷缩放 $s_q$ 主导综合评分方差，流量缩放 $s_m$ 次之，加工扰动的方差贡献较小。该结论只适用于当前扰动尺度与参数化模型。
+
+附件没有变流量和变热负荷下的新 CFD 数据，因此六类工况只能作为机理参数化压力测试。各场景单独优化时，排数会在 $N=4$ 与 $N=10$ 间切换；跨全部六类情景最小化最大模型遗憾后得到 $N=6$。这一结果用于说明模型形式不确定性，不足以证明实际工况下的精确最优设计。
+
+加工风险的 LHS 样本量由 20000 增至 40000 后，结构鲁棒方案的 CVaR95 从 0.418925 变为 0.418916，绝对差约 $8.99\times10^{-6}$。风险次序满足均值 $\le$ Q95 $\le$ CVaR95，且全部正式加工样本均位于鲁棒可行域，说明尾部风险估计在当前抽样规模下已达到数值稳定。
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.82\textwidth]{fig_q5_03_sensitivity.pdf}
+\caption{扰动因素的全局灵敏度比较}\label{fig:q5-sensitivity}\end{figure}
+图\ref{fig:q5-sensitivity}中热负荷缩放 $s_q$ 的一阶与总效应均最大，流量缩放 $s_m$ 次之；两项加工误差的指数在当前公差尺度下较小。一阶与总效应之间的差距反映因素参与交互所增加的方差贡献。该排序说明结构参数内移能够控制当前制造风险，但运行阶段的热负荷与流量管理仍是性能波动的主要来源，从而自然引出下面的加工精度与工况复核建议。
+
+\subsubsection{加工精度控制建议}
+建议采用 $(0.224006,4.4625,6)$ 作为考虑加工误差时的主方案，并保证 $a,b$ 的公差支持集不越出训练域；当工况分布或误差幅值改变时应重新评估 CVaR。若项目更关注跨工况模型遗憾，可将 $(0.231667,3.275,6)$ 作为备选，但其适用性只限于六类已声明参数化工况。
+
+\section{模型评价与推广}
+\subsection{模型优点}
+\begin{enumerate}[label=\arabic*.]
+\item 机理与数据相互校验，避免仅依赖黑箱拟合解释参数规律。
+\item 分支代理尊重有针肋与无针肋结构不连续性，三次 Ridge 精度高且便于批量优化。
+\item 网格、NSGA-II 和连续精化联合构造参考前沿，降低单一算法偶然性。
+\item 把名义折中、偏好鲁棒和加工鲁棒分层表述，决策条件清晰。
+\item 区分名义、偏好、制造和工况层面的适用条件，避免混用不同含义的鲁棒性。
+\end{enumerate}
+
+\subsection{模型缺点}
+代理模型仅由有限设计点训练；设计域边缘和未覆盖工况仍有不确定性。问题一缺少重复试验，不能作经典显著性推断。Q4 的偏好域与 Q5 的加工、工况分布具有主观设定成分，换用其他设定可能改变推荐。当前最优点尚需高保真 CFD 或样机试验回代确认。
+
+\subsection{模型推广}
+该框架可推广到冷板、热交换器、翼型或其他含离散结构变量的工程设计：先按物理结构分支建模，再构造 Pareto 前沿，随后分别处理决策偏好和制造风险。若新增数据，可采用主动学习在高不确定性或 Pareto 邻域补点，提高样本利用率。
+
+\section{结论}
+本文围绕结构机理、代理预测、多目标决策和扰动风险依次完成五项建模任务，主要结论如下。
+
+\textbf{问题一：}结构参数通过换热面积、过流面积、局部阻力和流量分配共同影响性能。$a=0.2$ 对应较低的 $R,U$；$b$ 由 3 增至 4.5 时 $P$ 下降约 32.2\%；$N$ 由 2 增至 10 时 $R$ 下降约 2.18\%、$P$ 上升约 30.9\%。$R,P,U$ 分别表征散热能力、泵送代价和热点可靠性，均应保留在综合评价中。
+
+\textbf{问题二：}有针肋与无针肋分支分别采用三次 Ridge 和 PCHIP 建模。三次 Ridge 对 $R,P,U$ 的平均 NRMSE 为 $6.54\times10^{-6}$、0.003737 和 0.003634，能够支持附件设计域内的组合预测与优化，但不保证域外工况精度。
+
+\textbf{问题三：}分层网格、20 次 NSGA-II 和连续精化共同得到名义折中方案 $(a,b,N)=(0.224932,4.5,6)$，预测 $(R,P,U)=(0.734330,0.097996,0.790195)$。该方案是增强切比雪夫判据下的综合折中，而非三个单目标同时达到最小。
+
+\textbf{问题四：}完整权重单纯形下，绝对和相对最小最大遗憾均选择 $(0.224932,4.5,6)$；在平衡或散热优先权重域中，推荐可切换到 $N=4$ 或 $N=8$。因此偏好鲁棒性必须与权重域和遗憾定义同时说明。
+
+\textbf{问题五：}考虑加工误差后，域内鲁棒主推荐为 $(0.224006,4.4625,6)$，CVaR95 约为 0.41893，六种加工误差设定均保留 $N=6$。工况敏感性中热负荷和流量缩放贡献较大；由于缺少新增变工况数据，相关情景只用于压力测试，制造实施时仍需进行高保真复核。
+
+\newpage
+\renewcommand{\refname}{\centering 参考文献}
+\begin{thebibliography}{99}
+\bibitem{ref1} Wang Q, Tao J, Cui Z, et al. Passive enhanced heat transfer, hotspot management and temperature uniformity enhancement of electronic devices by micro heat sinks: A review[J]. International Journal of Heat and Fluid Flow, 2024, 107:109368.
+\bibitem{ref2} Zhang X, Dong W, Liu J, et al. The influence of pin fin structure on the flow and heat transfer characteristics of the manifold microchannel heat sink[J]. Applied Thermal Engineering, 2025, 261:125119.
+\bibitem{ref3} Deb K, Pratap A, Agarwal S, et al. A fast and elitist multiobjective genetic algorithm: NSGA-II[J]. IEEE Transactions on Evolutionary Computation, 2002, 6(2):182--197.
+\bibitem{ref5} Hoerl A E, Kennard R W. Ridge regression: Biased estimation for nonorthogonal problems[J]. Technometrics, 1970, 12(1):55--67.
+\bibitem{ref6} Fritsch F N, Carlson R E. Monotone piecewise cubic interpolation[J]. SIAM Journal on Numerical Analysis, 1980, 17(2):238--246.
+\bibitem{ref7} Savage L J. The theory of statistical decision[J]. Journal of the American Statistical Association, 1951, 46(253):55--67.
+\bibitem{ref4} Rockafellar R T, Uryasev S. Optimization of conditional value-at-risk[J]. Journal of Risk, 2000, 2:21--42.
+\bibitem{ref8} Rockafellar R T, Uryasev S. Conditional value-at-risk for general loss distributions[J]. Journal of Banking and Finance, 2002, 26(7):1443--1471.
+\end{thebibliography}
+
+\clearpage
+\begin{appendices}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{A\arabic{figure}}
+\renewcommand{\theHfigure}{A.\arabic{figure}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+\renewcommand{\theHtable}{A.\arabic{table}}
+\section*{\centering 附录}\addcontentsline{toc}{section}{附录}
+\section{支撑材料目录\label{app:support-materials}}
+支撑材料按照完整可运行源程序与数据、正文未展示的补充图表、复现与校验材料三类整理。正文已经展示的图表不再作为独立附件重复提交，源程序运行必需的数据仍保留在完整运行目录中。目录结构如图\ref{fig:app-support-directory}所示。
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\textwidth,height=0.78\textheight,keepaspectratio]{support_materials_directory.png}
+\caption{支撑材料匿名化目录结构}
+\label{fig:app-support-directory}
+\end{figure}
+
+\section{核心代码\label{app:code}}
+本节代码直接引自结果包的登记入口，而非重新编写的示意程序。为兼顾复核完整性与篇幅，每问收录一份承担主计算流程的脚本。代码中的固定随机种子、合法域检查和输出文件名均予以保留。
+
+\begingroup
+\lstset{basicstyle=\small\ttfamily,
+numbers=left,numberstyle=\scriptsize,
+frame=single,breaklines=true,breakatwhitespace=false,
+showstringspaces=false,language=Python,columns=fullflexible,
+aboveskip=0.45em,belowskip=0.7em}
+
+\subsection{问题一：主效应、交互效应与贡献率}
+该程序先验证有针肋样本是否构成无重复全因子设计，再分别输出边际主效应、二阶交互残差和确定性平方和贡献率。由于没有独立重复，程序显式标记禁止进行经典显著性检验。
+\lstinputlisting[caption={Q1 效应分析完整入口}]{08_results/q1/code/q1_effect_analysis.py}
+
+\subsection{问题二：分支代理与嵌套交叉验证}
+该程序对有针肋分支执行外层 5 折、重复 10 次的嵌套交叉验证，并在训练折内部选择 Ridge 正则参数；无针肋分支单独比较离散节点、线性插值与 PCHIP，避免跨结构分支插值。
+\lstinputlisting[caption={Q2 分支代理构建与验证完整入口}]{08_results/q2/code/q2_build_and_validate_surrogate.py}
+
+\subsection{问题三：Pareto 前沿与名义折中}
+该程序实现三次 Ridge/PCHIP 分段预测、三目标非支配筛选、分层致密网格、锚点归一化、超体积计算和增强切比雪夫折中选择。NSGA-II 重复搜索与连续精化分别保存在同目录的算法比较和精化脚本中。
+\lstinputlisting[caption={Q3 Pareto 优化完整入口}]{08_results/q3/code/q3_optimize_pareto.py}
+
+\subsection{问题四：权重域与最小最大遗憾}
+该程序生成完整权重单纯形，并在完整、平衡和散热优先三个权重域内分别计算绝对遗憾与相对遗憾，输出最坏遗憾、平均遗憾、95\% 分位遗憾及最优排数的权重占比。
+\lstinputlisting[caption={Q4 偏好敏感性完整入口}]{08_results/q4/code/q4_analyze_preference_sensitivity.py}
+
+\subsection{问题五：误差分布、模型歧义与 Sobol 分析}
+该程序统一生成多类加工误差样本，计算候选方案的 CVaR95，检查扰动支持集，并对六类参数化工况执行模型遗憾比较；最后以固定种子和 $2^{15}$ 个基样本估计一阶及总效应 Sobol 指数。
+\lstinputlisting[caption={Q5 鲁棒性与全局灵敏度完整入口}]{08_results/q5/code/q5_analyze_sensitivity.py}
+\endgroup
+
+\end{appendices}
+\end{document}
