@@ -60,7 +60,10 @@ SOP、归档材料、模板和历史日志不是 Agent 规则来源；只有上�
 每次任务开始必须：
 
 1. 完整读取本文件、根 `README.md` 和相关目录 `README.md`。
-2. 读取 `00_progress/progress-log.md`、`00_progress/model-map.md`；涉及正式结果时再读 `08_results/results-index.md`。
+2. 当当前分支是项目分支（`practice/*`、`contest/*` 或其他明确项目分支）时，读取
+   `00_progress/progress-log.md`、`00_progress/model-map.md`；涉及正式结果时再读
+   `08_results/results-index.md`。`main` 仅保存治理基线，不要求在本地工作树中存在这些
+   项目文件；需要审阅项目状态时，必须切换至对应项目分支或以只读 Git 快照读取。
 3. 运行：
 
    ```text
